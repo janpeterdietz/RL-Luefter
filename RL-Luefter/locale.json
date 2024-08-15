@@ -1,0 +1,30 @@
+{
+    "translations": {
+        "de": {
+            "Active": "Aktiv",
+
+            "State": "Status",
+            "Powermode": "Leistungsstufe",
+            "Speed":"Lüftergeschwindigkeit",
+            "Operatingmode": "Betriebsart",
+
+            "Humidity": "Luftfeuchtigkeit",
+
+            "Filter cleaning": "Filter Reinigung",
+            "Time until filter cleaning": "Zeit bis Filterreinigung",
+            "Systemwarning": "Systemeldung",
+
+            "RTC Batterie Voltage": "RTC Batterie Spannung",
+
+
+            "Interval": "Interval",
+            
+            "Intensity": "Intensität",
+            "Brightness": "Helligkeit",
+            "Color": "Farbe",
+            "Color Temperature": "Farbtemperatur",
+            "seconds": "Sekunden",
+            "IP address": "IP Adresse"
+        }
+    }
+}

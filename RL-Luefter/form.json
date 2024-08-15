@@ -1,0 +1,9 @@
+{
+    "elements": [{
+        "type": "CheckBox",
+        "name": "Active",
+        "caption": "Active"
+    }],
+    "actions": [],
+    "status": []
+}
