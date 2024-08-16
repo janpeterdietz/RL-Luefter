@@ -131,7 +131,7 @@ declare(strict_types=1);
 			}
 		}
 
-		public function RequestAction(int $Ident, mixed $Value)
+		public function RequestAction(int $Ident, $Value)
         {
             switch ($Ident) {
                 case 'State':
