@@ -15,7 +15,7 @@ declare(strict_types=1);
 			{
 				IPS_CreateVariableProfile('RLV.Powermode', VARIABLETYPE_INTEGER);
 				IPS_SetVariableProfileText('RLV.Powermode', '', '');
-				IPS_SetVariableProfileValues ('RLV.Powermode', 1, 255, 1);
+				IPS_SetVariableProfileValues ('RLV.Powermode', 1, 255, );
 				IPS_SetVariableProfileAssociation('RLV.Powermode', 0x01, $this->Translate("Level 1"),"" , -1);
 				IPS_SetVariableProfileAssociation('RLV.Powermode', 0x02, $this->Translate("Level 2"),"" , -1);
 				IPS_SetVariableProfileAssociation('RLV.Powermode', 0x03, $this->Translate("Level 3"),"" , -1);
@@ -26,7 +26,7 @@ declare(strict_types=1);
 			{
 				IPS_CreateVariableProfile('RLV.Operatingmode', VARIABLETYPE_INTEGER);
 				IPS_SetVariableProfileText('RLV.Operatingmode', '', '');
-				IPS_SetVariableProfileValues ('RLV.Operatingmode', 1, 3, 1);
+				IPS_SetVariableProfileValues ('RLV.Operatingmode', 1, 3, );
 				IPS_SetVariableProfileAssociation('RLV.Operatingmode', 0x01, $this->Translate("Exhaust Air"),"" , -1);
 				IPS_SetVariableProfileAssociation('RLV.Operatingmode', 0x02, $this->Translate("Heat recovery"),"" , -1);
 				IPS_SetVariableProfileAssociation('RLV.Operatingmode', 0x03, $this->Translate("supply air"),"" , -1);
@@ -36,7 +36,7 @@ declare(strict_types=1);
 			{
 				IPS_CreateVariableProfile('RLV.AlertLevel', VARIABLETYPE_INTEGER);
 				IPS_SetVariableProfileText('RLV.AlertLevel', '', '');
-				IPS_SetVariableProfileValues ('RLV.AlertLevel', 0, 2, 1);
+				IPS_SetVariableProfileValues ('RLV.AlertLevel', 0, 2, 0);
 				IPS_SetVariableProfileAssociation('RLV.AlertLevel', 0x00, $this->Translate("OK"),'' , 0x7FFF00);
 				IPS_SetVariableProfileAssociation('RLV.AlertLevel', 0x01, $this->Translate("Warning"),'' , 0xFFFF00);
 				IPS_SetVariableProfileAssociation('RLV.AlertLevel', 0x02, $this->Translate("Alarm"),'' , 0xFF0000);
@@ -131,7 +131,7 @@ declare(strict_types=1);
 			}
 		}
 
-		public function RequestAction($Ident, $Value)
+		public function RequestAction(int $Ident, mixed $Value)
         {
             switch ($Ident) {
                 case 'State':
@@ -219,7 +219,7 @@ declare(strict_types=1);
 			}
 		}
 
-		private function read_paremter( $data, $position )
+		private function read_paremter( string $data, int $position )
 		{
 
 			$Parameter_Id = hexdec( bin2hex($data[$position]) ) ; 
@@ -438,7 +438,7 @@ declare(strict_types=1);
 			return $datablock;
 		}
 
-		private function Calc_Checksumm( $data )
+		private function Calc_Checksumm( string $data )
 		{
 			$i = 0; 
 			$chksum = 0;
