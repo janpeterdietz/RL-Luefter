@@ -17,8 +17,8 @@ declare(strict_types=1);
 				IPS_SetVariableProfileText('RLV.Powermode', '', '');
 				IPS_SetVariableProfileValues ('RLV.Powermode', 1, 255, 1);
 				IPS_SetVariableProfileAssociation('RLV.Powermode', 0x01, $this->Translate("Level 1"),"" , -1);
-				IPS_SetVariableProfileAssociation('RLV.Powermode', 0x02, $this->Translate("Level 2)","" , -1);
-				IPS_SetVariableProfileAssociation('RLV.Powermode', 0x03, $this->Translate("Level 3)","" , -1);
+				IPS_SetVariableProfileAssociation('RLV.Powermode', 0x02, $this->Translate("Level 2"),"" , -1);
+				IPS_SetVariableProfileAssociation('RLV.Powermode', 0x03, $this->Translate("Level 3"),"" , -1);
 				IPS_SetVariableProfileAssociation('RLV.Powermode', 0xFF, $this->Translate("Manuel"),"" , -1);
 			}
 
