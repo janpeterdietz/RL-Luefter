@@ -131,6 +131,37 @@ declare(strict_types=1);
 			}
 		}
 
+		public function SetValueEx(array $data)
+        {
+			$datablock = "";
+			if (array_key_exists('Speed', $data))
+			{
+				$datablock = $datablock . $this->translate_paramter( 'Speed', $data['Speed'] );
+			}
+	
+			if (array_key_exists('State', $data))
+			{
+				$datablock = $datablock . $this->translate_paramter( 'State', $data['State'] );
+			}
+			
+			if (array_key_exists('Powermode', $data))
+			{
+				$datablock = $datablock . $this->translate_paramter( 'Powermode', $data['Powermode'] );
+			}
+	
+			if (array_key_exists('Operatingmode', $data))
+			{
+				$datablock = $datablock . $this->translate_paramter( 'Operatingmode', $data['Operatingmode'] );
+			}
+	
+			if (strlen($datablock) >= 2)
+			{
+				$this->send_parameter($datablock );
+			}
+	
+        }
+
+
 		public function RequestAction($Ident, $Value)
         {
             switch ($Ident) {
