@@ -164,7 +164,8 @@ declare(strict_types=1);
 
 		public function RequestAction($Ident, $Value)
         {
-            switch ($Ident) {
+            switch ($Ident) 
+			{
                 case 'State':
 					$datablock = $this->translate_paramter( $Ident, (int)$Value);
 					$this->send_parameter( $datablock );
@@ -190,7 +191,6 @@ declare(strict_types=1);
 
 		public function RequestStatus()
 		{
-
 			$start = hex2bin('FDFD');
 			$type = hex2bin('02');
 
@@ -223,7 +223,7 @@ declare(strict_types=1);
 			}
 		}
 
-		public function send_parameter( string $datablock  )
+		private function send_parameter( string $datablock  )
 		{
 			$start = hex2bin('FDFD');
 			$type = hex2bin('02');
