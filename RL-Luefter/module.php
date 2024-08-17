@@ -141,7 +141,7 @@ declare(strict_types=1);
 	
 			if (array_key_exists('State', $data))
 			{
-				$datablock = $datablock . $this->translate_paramter( 'State', $data['State'] );
+				$datablock = $datablock . $this->translate_paramter( 'State', (int)$data['State'] );
 			}
 			
 			if (array_key_exists('Powermode', $data))
