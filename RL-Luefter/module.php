@@ -215,11 +215,11 @@ declare(strict_types=1);
 
 			$checksum = $this->calc_checksumm( $start . $type . $id_luefter_blocksize . $id_luefter . $pw_blocksize . $password . $funcnumber . $datablock );
 
-			$content = utf8_encode($start . $type . $id_luefter_blocksize . $id_luefter . $pw_blocksize . $password . $funcnumber . $datablock . $checksum);
+			$content = $start . $type . $id_luefter_blocksize . $id_luefter . $pw_blocksize . $password . $funcnumber . $datablock . $checksum;
 			
 			if ($this->HasActiveParent()) 
 			{
-           		$this->SendDataToParent(json_encode(['DataID' => '{C8792760-65CF-4C53-B5C7-A30FCC84FEFE}', "ClientIP" => '', "ClientPort" => 0, "Buffer" => $content]));
+           		$this->SendDataToParent(json_encode(['DataID' => '{C8792760-65CF-4C53-B5C7-A30FCC84FEFE}', "ClientIP" => '', "ClientPort" => 0, "Buffer" => utf8_encode($content)]));
 			}
 		}
 
@@ -242,11 +242,11 @@ declare(strict_types=1);
 
 			$checksum = $this->Calc_Checksumm( $start . $type . $id_luefter_blocksize . $id_luefter . $pw_blocksize . $password . $funcnumber . $datablock );
 
-			$content = utf8_encode($start . $type . $id_luefter_blocksize . $id_luefter . $pw_blocksize . $password . $funcnumber . $datablock . $checksum);
+			$content = $start . $type . $id_luefter_blocksize . $id_luefter . $pw_blocksize . $password . $funcnumber . $datablock . $checksum;
 
 			if ($this->HasActiveParent()) 
 			{
-           		$this->SendDataToParent(json_encode(['DataID' => '{C8792760-65CF-4C53-B5C7-A30FCC84FEFE}', "ClientIP" => '', "ClientPort" => 0, "Buffer" => $content]));
+           		$this->SendDataToParent(json_encode(['DataID' => '{C8792760-65CF-4C53-B5C7-A30FCC84FEFE}', "ClientIP" => '', "ClientPort" => 0, "Buffer" => utf8_encode($content)]));
 			}
 		}
 
