@@ -219,7 +219,12 @@ declare(strict_types=1);
 			
 			if ($this->HasActiveParent()) 
 			{
-           		$this->SendDataToParent(json_encode(['DataID' => '{C8792760-65CF-4C53-B5C7-A30FCC84FEFE}', "ClientIP" => '', "ClientPort" => 0, "Buffer" => utf8_encode($content)]));
+           		$this->SendDataToParent(json_encode([
+					'DataID' => '{C8792760-65CF-4C53-B5C7-A30FCC84FEFE}',
+					'ClientIP' => '',
+					'ClientPort' => 0,
+					'Type' => 0,
+					"Buffer" => utf8_encode($content)]));
 			}
 		}
 
@@ -246,7 +251,12 @@ declare(strict_types=1);
 
 			if ($this->HasActiveParent()) 
 			{
-           		$this->SendDataToParent(json_encode(['DataID' => '{C8792760-65CF-4C53-B5C7-A30FCC84FEFE}', "ClientIP" => '', "ClientPort" => 0, "Buffer" => utf8_encode($content)]));
+           		$this->SendDataToParent(json_encode([
+					'DataID' => '{C8792760-65CF-4C53-B5C7-A30FCC84FEFE}',
+					'ClientIP' => '',
+					'ClientPort' => 0,
+					'Type' => 0,
+					"Buffer" => utf8_encode($content)]));
 			}
 		}
 
