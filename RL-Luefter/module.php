@@ -228,7 +228,7 @@ declare(strict_types=1);
 
 				$this->SendDataToParent(json_encode([
 					'DataID' => "{8E4D9B23-E0F2-1E05-41D8-C21EA53B8706}",
-					'Buffer' => utf8_encode(content),
+					'Buffer' => utf8_encode($content),
 					'ClientIP' => '',
 					'ClientPort' => 0,
 					'Broadcast' => false
@@ -268,7 +268,7 @@ declare(strict_types=1);
 
 				$this->SendDataToParent(json_encode([
 					'DataID' => "{8E4D9B23-E0F2-1E05-41D8-C21EA53B8706}",
-					'Buffer' => utf8_encode(content),
+					'Buffer' => utf8_encode($content),
 					'ClientIP' => '',
 					'ClientPort' => 0,
 					'Broadcast' => false
