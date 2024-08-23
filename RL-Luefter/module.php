@@ -73,6 +73,10 @@ declare(strict_types=1);
 			$this->EnableAction('Operatingmode');
 
 			$this->RegisterTimer("UpdateSensorData", ($this->ReadPropertyInteger("UpdateInterval"))*1000, 'RL_RequestStatus(' . $this->InstanceID . ');');
+
+			$data = json_decode( IPS_GetConfiguration(IPS_GetInstance($this->InstanceID)["ConnectionID"] ), true);
+			$this->SetSummary($data["Host"]);
+
 		}
 
 		public function Destroy()
@@ -243,9 +247,6 @@ declare(strict_types=1);
 
 			//$id_luefter = '0028001856565108'; // Schlafzimmer
 			$id_luefter = $this->ReadPropertyString("Vent_ident");
-		
-
-			$id_luefter_blocksize = chr(strlen($id_luefter));
 			$id_luefter_blocksize = hex2bin('10');
 
 			$password = '1111';
