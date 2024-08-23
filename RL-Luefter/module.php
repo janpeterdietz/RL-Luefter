@@ -97,7 +97,7 @@ declare(strict_types=1);
 			if ($data !== false)
 			{
 				this->WriteAttributeString("IP_Adress", ""); 
-				$this->SetSummary(this->ReadAttributeString("IP_Adress"));
+				$this->SetSummary($this->ReadAttributeString("IP_Adress"));
 			}
 			
 		}
