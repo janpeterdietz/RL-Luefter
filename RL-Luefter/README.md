@@ -23,6 +23,7 @@ Beschreibung des Moduls.
 
 * Über den Module Store das 'RL_Luefter'-Modul installieren.
 * Alternativ über das Module Control folgende URL hinzufügen
+https://github.com/janpeterdietz/RL-Luefter
 
 ### 4. Einrichten der Instanzen in IP-Symcon
 
@@ -31,10 +32,18 @@ Beschreibung des Moduls.
 
 __Konfigurationsseite__:
 
-Name     | Beschreibung
--------- | ------------------
-         |
-         |
+Name              | Beschreibung
+----------------- | ------------------
+Update Interval       | Wert in Sekunden zur Zyklischen Abfrage der Lüfterdaten
+Lüfter Identifktion   | Lüfter ID als String
+
+Es wird immmer das Standardpasswort verwendet „1111“.
+
+Es wird aufgefort einen UPD Soket zu Konfiguiren
+Sende Host: IP-des Lüfters
+Sende Port: z.B. auf 4000
+Empf. Host: IP des Symcon Systems
+Empf Port: z.B. auf 5000 (bis immer mit verschiendenen Ports pro Lüfter Konfiguration getestet)
 
 ### 5. Statusvariablen und Profile
 
@@ -60,8 +69,24 @@ Die Funktionalität, die das Modul in der Visualisierung bietet.
 
 ### 7. PHP-Befehlsreferenz
 
-`boolean RL_BeispielFunktion(integer $InstanzID);`
-Erklärung der Funktion.
+über 
+RequestAction(int $id, $value) könnne die Werte 
+       State
+       Powermode
+       Speed
+und    Operatingmode einzeln gesetzt werden.
 
+RL_SetValueEx(int $id, array)
+erlaubt ein setzen von meheren Werten gleichzeitig.
+Es müssen nicht alle gestzet werden.
 Beispiel:
-`RL_BeispielFunktion(12345);`
+
+$new_para['State'] = true; // Lüfter Ein
+$new_para['Operatingmode'] = 1; // Wärmerückgewinnung 
+$new_para['Powermode'] = 0xff; // Manuel Lüftergeschwindigkeit
+$new_para['Speed'] = 10 ; // Lüfter Speed
+RL_SetValueEx($id_Lufter_instanz, $new_para);
+
+
+
+			
