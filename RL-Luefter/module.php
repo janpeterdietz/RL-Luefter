@@ -96,7 +96,7 @@ declare(strict_types=1);
 			$data = json_decode( IPS_GetConfiguration(IPS_GetInstance($this->InstanceID)["ConnectionID"] ), true);
 			if ($data !== false)
 			{
-				this->WriteAttributeString("IP_Adress", ""); 
+				$this->WriteAttributeString("IP_Adress", ""); 
 				$this->SetSummary($this->ReadAttributeString("IP_Adress"));
 			}
 			
