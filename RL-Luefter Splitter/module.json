@@ -1,0 +1,19 @@
+{
+    "id": "{B62FAC0C-B4EE-9669-4FA3-334D4BD50E3D}",
+    "name": "RL_Luefter Splitter",
+    "type": 2,
+    "vendor": "",
+    "aliases": [],
+    "parentRequirements": [
+        "{C8792760-65CF-4C53-B5C7-A30FCC84FEFE}"
+    ],
+    "childRequirements": [
+        "{58B9F909-B1CE-13FA-2BA8-1B377446CAED}"
+    ],
+    "implemented": [
+        "{4E2090FD-8113-C239-622E-BCA354396964}",
+        "{7A1272A4-CBDB-46EF-BFC6-DCF4A53D2FC7}"
+    ],
+    "prefix": "RL",
+    "url": ""
+}
