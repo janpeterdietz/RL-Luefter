@@ -93,14 +93,6 @@ declare(strict_types=1);
 			$this->RequestStatus();
 			$this->SetTimerInterval("UpdateSensorData", ($this->ReadPropertyInteger("UpdateInterval"))*1000);
 
-
-			$data = json_decode( IPS_GetConfiguration(IPS_GetInstance($this->InstanceID)["ConnectionID"] ), true);
-			if ($data !== false)
-			{
-				$this->WriteAttributeString("IP_Adress", ""); 
-				$this->SetSummary($this->ReadAttributeString("IP_Adress"));
-			}
-
 			$IPAddress = $this->ReadPropertyString("IPAddress");
 			$this->SetSummary($IPAddress);
 
