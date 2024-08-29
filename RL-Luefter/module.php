@@ -90,8 +90,20 @@ declare(strict_types=1);
 			//Never delete this line!
 			parent::ApplyChanges();
 
-			$this->RequestStatus();
-			$this->SetTimerInterval("UpdateSensorData", ($this->ReadPropertyInteger("UpdateInterval"))*1000);
+			
+			if ($this->ReadPropertyBoolean('Active')) 
+			{
+				$this->RequestStatus();
+		
+				$this->SetTimerInterval('Updatestate', $this->ReadPropertyInteger('UpdateInterval') * 1000);
+                $this->SetStatus(102);
+            } else 
+			{
+                $this->SetTimerInterval('Updatestate', 0);
+                $this->SetStatus(104);
+            }
+
+
 
 			$IPAddress = $this->ReadPropertyString("IPAddress");
 			$this->SetSummary($IPAddress);
@@ -245,18 +257,7 @@ declare(strict_types=1);
 			$content = $start . $type . $id_luefter_blocksize . $id_luefter . $pw_blocksize . $password . $funcnumber . $datablock . $checksum;
 			
 			$this->SendData(utf8_encode($content));
-			/*
-			if ($this->HasActiveParent()) 
-			{
-				$this->SendDataToParent(json_encode([
-					'DataID' =>  "{4E2090FD-8113-C239-622E-BCA354396964}",
-					'Buffer' => utf8_encode($content),
-					'ClientIP' => $this->ReadPropertyString("IPAddress"),
-					'ClientPort' => 0,
-					'Broadcast' => false
-				]));
-			}
-			*/
+	
 		}
 
 		private function send_parameter( string $datablock  )
@@ -278,19 +279,6 @@ declare(strict_types=1);
 			$content = $start . $type . $id_luefter_blocksize . $id_luefter . $pw_blocksize . $password . $funcnumber . $datablock . $checksum;
 
 			$this->SendData(utf8_encode($content));
-			/*
-			if ($this->HasActiveParent()) 
-			{
-
-				$this->SendDataToParent(json_encode([
-					'DataID' =>  "{4E2090FD-8113-C239-622E-BCA354396964}",
-					'Buffer' => utf8_encode($content),
-					'ClientIP' => $this->ReadPropertyString("IPAddress"),
-					'ClientPort' => 0,
-					'Broadcast' => false
-				]));
-			}
-				*/
 		}
 
 		private function read_paremter( string $data, int $position )
