@@ -202,6 +202,20 @@ declare(strict_types=1);
             }
         }
 
+		public function SendData(string $Payload)
+		{
+			if ($this->HasActiveParent()) 
+			{
+				$this->SendDataToParent(json_encode([
+					'DataID' => '{4E2090FD-8113-C239-622E-BCA354396964}',
+					'Buffer' => $Payload,
+					'ClientIP' => $this->ReadPropertyString("IPAddress"),	
+            		'ClientPort' => 0,
+					'Broadcast' => false
+				]));
+			}
+		}
+
 		public function RequestStatus()
 		{
 			$start = hex2bin('FDFD');
@@ -230,6 +244,8 @@ declare(strict_types=1);
 
 			$content = $start . $type . $id_luefter_blocksize . $id_luefter . $pw_blocksize . $password . $funcnumber . $datablock . $checksum;
 			
+			$this->SendData(utf8_encode($content));
+			/*
 			if ($this->HasActiveParent()) 
 			{
 				$this->SendDataToParent(json_encode([
@@ -240,6 +256,7 @@ declare(strict_types=1);
 					'Broadcast' => false
 				]));
 			}
+			*/
 		}
 
 		private function send_parameter( string $datablock  )
@@ -260,6 +277,8 @@ declare(strict_types=1);
 
 			$content = $start . $type . $id_luefter_blocksize . $id_luefter . $pw_blocksize . $password . $funcnumber . $datablock . $checksum;
 
+			$this->SendData(utf8_encode($content));
+			/*
 			if ($this->HasActiveParent()) 
 			{
 
@@ -271,6 +290,7 @@ declare(strict_types=1);
 					'Broadcast' => false
 				]));
 			}
+				*/
 		}
 
 		private function read_paremter( string $data, int $position )
