@@ -74,8 +74,7 @@ declare(strict_types=1);
 
 			$this->RegisterTimer("UpdateSensorData", ($this->ReadPropertyInteger("UpdateInterval"))*1000, 'RL_RequestStatus(' . $this->InstanceID . ');');
 
-			$data = json_decode( IPS_GetConfiguration(IPS_GetInstance($this->InstanceID)["ConnectionID"] ), true);
-			$this->SetSummary($data["Host"]);
+			$this->RegisterAttributeString("IP_Adress", ""); 
 
 		}
 
@@ -92,7 +91,15 @@ declare(strict_types=1);
 
 			$this->RequestStatus();
 			$this->SetTimerInterval("UpdateSensorData", ($this->ReadPropertyInteger("UpdateInterval"))*1000);
-		
+
+
+			$data = json_decode( IPS_GetConfiguration(IPS_GetInstance($this->InstanceID)["ConnectionID"] ), true);
+			if ($data !== false)
+			{
+				$this->WriteAttributeString("IP_Adress", ""); 
+				$this->SetSummary($this->ReadAttributeString("IP_Adress"));
+			}
+			
 		}
 
 		public function ReceiveData($JSONString)
