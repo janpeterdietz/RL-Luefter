@@ -46,7 +46,7 @@ declare(strict_types=1);
 		public function ForwardData($JSONString)
 		{
 			$data = json_decode($JSONString);
-			IPS_LogMessage('Splitter FRWD', utf8_decode($data->Buffer . ' - ' . $data->ClientIP . ' - ' . $data->ClientPort));
+			//IPS_LogMessage('Splitter FRWD', utf8_decode($data->Buffer . ' - ' . $data->ClientIP . ' - ' . $data->ClientPort));
 
 			$this->SendDataToParent(json_encode(
 				[
@@ -63,7 +63,7 @@ declare(strict_types=1);
 		public function ReceiveData($JSONString)
 		{
 			$data = json_decode($JSONString);
-			IPS_LogMessage('Splitter RECV', utf8_decode($data->Buffer . ' - ' . $data->ClientIP . ' - ' . $data->ClientPort));
+			//IPS_LogMessage('Splitter RECV', utf8_decode($data->Buffer . ' - ' . $data->ClientIP . ' - ' . $data->ClientPort));
 
 			$this->SendDataToChildren(json_encode(
 				[
