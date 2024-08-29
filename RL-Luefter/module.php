@@ -8,8 +8,8 @@ declare(strict_types=1);
 			//Never delete this line!
 			parent::Create();
 
-			$this->RequireParent('{82347F20-F541-41E1-AC5B-A636FD3AE2D8}');
-
+			$this->ConnectParent('{B62FAC0C-B4EE-9669-4FA3-334D4BD50E3D}');
+			
 
 			if (!IPS_VariableProfileExists('RLV.Powermode')) 
 			{
@@ -53,6 +53,7 @@ declare(strict_types=1);
 			$this->RegisterPropertyBoolean('Active', false);
 			$this->RegisterPropertyString('Vent_ident', false);
 			$this->RegisterPropertyInteger("UpdateInterval", 60);
+			$this->RegisterPropertyString("IPAddress", "192.168.178.1");
 			
 		
 			$this->RegisterVariableBoolean ("State", $this->Translate("State"),  "~Switch", 10) ;
@@ -89,24 +90,37 @@ declare(strict_types=1);
 			//Never delete this line!
 			parent::ApplyChanges();
 
-			$this->RequestStatus();
-			$this->SetTimerInterval("UpdateSensorData", ($this->ReadPropertyInteger("UpdateInterval"))*1000);
-
-
-			$data = json_decode( IPS_GetConfiguration(IPS_GetInstance($this->InstanceID)["ConnectionID"] ), true);
-			if ($data !== false)
+			
+			if ($this->ReadPropertyBoolean('Active')) 
 			{
-				$this->WriteAttributeString("IP_Adress", ""); 
-				$this->SetSummary($this->ReadAttributeString("IP_Adress"));
-			}
+				$this->RequestStatus();
+		
+				$this->SetTimerInterval('UpdateSensorData', $this->ReadPropertyInteger('UpdateInterval') * 1000);
+                $this->SetStatus(102);
+            } else 
+			{
+                $this->SetTimerInterval('UpdateSensorData', 0);
+                $this->SetStatus(104);
+            }
+
+
+
+			$IPAddress = $this->ReadPropertyString("IPAddress");
+			$this->SetSummary($IPAddress);
+
+		
+			$filter = '.*"ClientIP":.*';
+			$filter .= '.*' . '"' . $IPAddress. '"'. '.*';
+			
+			$this->SetReceiveDataFilter($filter);
 			
 		}
 
 		public function ReceiveData($JSONString)
 		{
 			$data = json_decode($JSONString);
-			//IPS_LogMessage('Device RECV', utf8_decode($data->Buffer . ' - ' . $data->ClientIP . ' - ' . $data->ClientPort));
-
+			//IPS_LogMessage('Device RECV', $data->Buffer . ' - ' . $data->ClientIP . ' - ' . $data->ClientPort);
+			
 			$id_luefter = $this->ReadPropertyString("Vent_ident");
 			$data = utf8_decode($data->Buffer) ;
 
@@ -200,6 +214,20 @@ declare(strict_types=1);
             }
         }
 
+		public function SendData(string $Payload)
+		{
+			if ($this->HasActiveParent()) 
+			{
+				$this->SendDataToParent(json_encode([
+					'DataID' => '{4E2090FD-8113-C239-622E-BCA354396964}',
+					'Buffer' => $Payload,
+					'ClientIP' => $this->ReadPropertyString("IPAddress"),	
+            		'ClientPort' => 0,
+					'Broadcast' => false
+				]));
+			}
+		}
+
 		public function RequestStatus()
 		{
 			$start = hex2bin('FDFD');
@@ -228,23 +256,8 @@ declare(strict_types=1);
 
 			$content = $start . $type . $id_luefter_blocksize . $id_luefter . $pw_blocksize . $password . $funcnumber . $datablock . $checksum;
 			
-			if ($this->HasActiveParent()) 
-			{
-           		/*$this->SendDataToParent(json_encode([
-					'DataID' => '{C8792760-65CF-4C53-B5C7-A30FCC84FEFE}',
-					'ClientIP' => '',
-					'ClientPort' => 0,
-					'Type' => 0,
-					"Buffer" => utf8_encode($content)]));*/
-
-				$this->SendDataToParent(json_encode([
-					'DataID' => "{8E4D9B23-E0F2-1E05-41D8-C21EA53B8706}",
-					'Buffer' => utf8_encode($content),
-					'ClientIP' => '',
-					'ClientPort' => 0,
-					'Broadcast' => false
-				]));
-			}
+			$this->SendData(utf8_encode($content));
+	
 		}
 
 		private function send_parameter( string $datablock  )
@@ -265,23 +278,7 @@ declare(strict_types=1);
 
 			$content = $start . $type . $id_luefter_blocksize . $id_luefter . $pw_blocksize . $password . $funcnumber . $datablock . $checksum;
 
-			if ($this->HasActiveParent()) 
-			{
-           		/*$this->SendDataToParent(json_encode([
-					'DataID' => '{C8792760-65CF-4C53-B5C7-A30FCC84FEFE}',
-					'ClientIP' => '',
-					'ClientPort' => 0,
-					'Type' => 0,
-					"Buffer" => utf8_encode($content)]));*/
-
-				$this->SendDataToParent(json_encode([
-					'DataID' => "{8E4D9B23-E0F2-1E05-41D8-C21EA53B8706}",
-					'Buffer' => utf8_encode($content),
-					'ClientIP' => '',
-					'ClientPort' => 0,
-					'Broadcast' => false
-				]));
-			}
+			$this->SendData(utf8_encode($content));
 		}
 
 		private function read_paremter( string $data, int $position )
