@@ -95,11 +95,11 @@ declare(strict_types=1);
 			{
 				$this->RequestStatus();
 		
-				$this->SetTimerInterval('Updatestate', $this->ReadPropertyInteger('UpdateInterval') * 1000);
+				$this->SetTimerInterval('UpdateSensorData', $this->ReadPropertyInteger('UpdateInterval') * 1000);
                 $this->SetStatus(102);
             } else 
 			{
-                $this->SetTimerInterval('Updatestate', 0);
+                $this->SetTimerInterval('UpdateSensorData', 0);
                 $this->SetStatus(104);
             }
 
