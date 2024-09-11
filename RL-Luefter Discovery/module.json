@@ -1,7 +1,7 @@
 {
     "id": "{B6AC3538-BFB4-042F-3586-72B6FE863E3E}",
     "name": "RL_Luefter Discovery",
-    "type": 3,
+    "type": 5,
     "vendor": "Impruf",
     "aliases": [],
     "parentRequirements": [
