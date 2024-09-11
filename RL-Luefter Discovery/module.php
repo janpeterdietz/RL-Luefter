@@ -33,14 +33,16 @@ declare(strict_types=1);
 
 		public function SendData(string $Payload)
 		{
-			if ($this->HasActiveParent()) 
+			//if ($this->HasActiveParent()) 
 			{
 				$this->SendDataToParent(json_encode([
+				
 					'DataID' => '{4E2090FD-8113-C239-622E-BCA354396964}',
 					'Buffer' => $Payload,
-					'ClientIP' => $this->ReadPropertyString("IPAddress"),	
-            		'ClientPort' => 0,
-					'Broadcast' => false
+					'ClientIP'=> '239.255.255.250',
+					'ClientPort' => 0,
+					'Broadcast' => true,
+					'EnableBroadcast' => true,
 				]));
 			}
 		}
