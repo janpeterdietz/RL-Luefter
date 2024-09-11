@@ -135,11 +135,18 @@ declare(strict_types=1);
 			
 			$func = hexdec( bin2hex($data[$position = 25]) )  ; 
 			
-			//IPS_LogMessage("Lüfter Auslesen ", strlen($data) );
+			IPS_LogMessage("Lüfter Auslesen ", strlen($data) );
 
-			if ($func == 0x06 )
+			if (($func == 0x06 ) or ($func == 0x04 ))
 			{    
-				$i = 26;
+				if ($func == 0x06 )
+				{
+					$i = 26;
+				}
+				else
+				{
+					$i = 27;
+				}
 				while ( $i <= (strlen($data) - 3) )
 				{   
 					$i = $this->read_paremter( $data, $i);
@@ -234,6 +241,7 @@ declare(strict_types=1);
 			$type = hex2bin('02');
 
 			$id_luefter = $this->ReadPropertyString("Vent_ident");
+			$id_luefter = 'DEFAULT_DEVICEID';
 			$id_luefter_blocksize = hex2bin('10');
 
 			$password = '1111';
@@ -251,6 +259,7 @@ declare(strict_types=1);
 			//B7 = Betriebsart des Ventilators
 			
 			$datablock = hex2bin('0102242544648388B7');  
+			$datablock = hex2bin('7C');  
 
 			$checksum = $this->calc_checksumm( $start . $type . $id_luefter_blocksize . $id_luefter . $pw_blocksize . $password . $funcnumber . $datablock );
 
@@ -347,6 +356,12 @@ declare(strict_types=1);
 					$position = $position + 2;
 				break;
 
+				case 0x7C: // ID
+					$ID= substr($data, $position +1, 16); 
+					IPS_LogMessage('Lüfter ID', $ID);
+					$position = $position + 17;
+				break;
+
 				case 0x83: // Alarm
 					$Alarm = hexdec( bin2hex($data[$position +1]) )  ; 
 					$this->SetValue('Systemwarning', $Alarm);
@@ -376,7 +391,7 @@ declare(strict_types=1);
 				break;
 
 				default: // ???
-					IPS_LogMessage("Lüfter Auslesen ", "Parameter nicht bekannt $Parameter_Id");
+					IPS_LogMessage("Lüfter Auslesen ", "Parameter nicht bekannt: $Parameter_Id Position: $position");
 					return false;
 				break;       
 			}			

@@ -22,6 +22,8 @@ declare(strict_types=1);
 		{
 			//Never delete this line!
 			parent::ApplyChanges();
+
+			$this->ScanDevices();
 		}
 
 		public function ReceiveData($JSONString)
@@ -33,6 +35,8 @@ declare(strict_types=1);
 
 		public function SendData(string $Payload)
 		{
+			IPS_LogMessage('RL  DISC', $Payload );
+			
 			//if ($this->HasActiveParent()) 
 			{
 				$this->SendDataToParent(json_encode([
@@ -49,10 +53,11 @@ declare(strict_types=1);
 
 		public function ScanDevices()
 		{
+			
 			$start = hex2bin('FDFD');
 			$type = hex2bin('02');
 
-			$id_luefter = $this->ReadPropertyString("Vent_ident");
+			$id_luefter = 'DEFAULT_DEVICEID';
 			$id_luefter_blocksize = hex2bin('10');
 
 			$password = '1111';
@@ -68,8 +73,8 @@ declare(strict_types=1);
 			//83 = Alarm Level
 			//88 = Filterwechel Aufforderung
 			//B7 = Betriebsart des Ventilators
-			
-			$datablock = hex2bin('0102242544648388B7');  
+
+			$datablock = hex2bin('7C');  
 
 			$checksum = $this->calc_checksumm( $start . $type . $id_luefter_blocksize . $id_luefter . $pw_blocksize . $password . $funcnumber . $datablock );
 

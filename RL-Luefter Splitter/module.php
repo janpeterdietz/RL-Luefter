@@ -52,9 +52,11 @@ declare(strict_types=1);
 				[
 				'DataID' => '{8E4D9B23-E0F2-1E05-41D8-C21EA53B8706}', 
 				'Buffer' => $data->Buffer, 
+			
 				'ClientIP' => $data->ClientIP,
             	'ClientPort' => $data->ClientPort,
-				'Broadcast' => false
+				'EnableBroadcast' => true,
+				'Broadcast' => $data->Broadcast
 				]));
 
 			return 'String data for device instance!';
