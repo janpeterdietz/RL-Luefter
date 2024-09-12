@@ -438,6 +438,7 @@ declare(strict_types=1);
 					{
 						$value = 255;
 					}
+					$value1 = value;
 					$value = dechex($value);
 					
 					if (strlen($value) <= 1)
@@ -465,8 +466,10 @@ declare(strict_types=1);
 					}
 			
 					$para = hex2bin('44');
-
 					$datablock = $para . $value;
+
+					$datablock = $para . sprintf('%c', $value1);
+
 				break;   
 
 		
