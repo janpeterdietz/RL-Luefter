@@ -21,6 +21,7 @@ declare(strict_types=1);
 				IPS_SetVariableProfileAssociation('RLV.Powermode', 0x03, $this->Translate("Level 3"),"" , -1);
 				IPS_SetVariableProfileAssociation('RLV.Powermode', 0xFF, $this->Translate("Manuel"),"" , -1);
 			}
+			
 
 			if (!IPS_VariableProfileExists('RLV.Operatingmode')) 
 			{
