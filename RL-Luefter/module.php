@@ -15,7 +15,7 @@ declare(strict_types=1);
 			{
 				IPS_CreateVariableProfile('RLV.Powermode', VARIABLETYPE_INTEGER);
 				IPS_SetVariableProfileText('RLV.Powermode', '', '');
-				IPS_SetVariableProfileValues ('RLV.Powermode', 1, 255, );
+				IPS_SetVariableProfileValues ('RLV.Powermode', 1, 255, 1);
 				IPS_SetVariableProfileAssociation('RLV.Powermode', 0x01, $this->Translate("Level 1"),"" , -1);
 				IPS_SetVariableProfileAssociation('RLV.Powermode', 0x02, $this->Translate("Level 2"),"" , -1);
 				IPS_SetVariableProfileAssociation('RLV.Powermode', 0x03, $this->Translate("Level 3"),"" , -1);
@@ -26,7 +26,7 @@ declare(strict_types=1);
 			{
 				IPS_CreateVariableProfile('RLV.Operatingmode', VARIABLETYPE_INTEGER);
 				IPS_SetVariableProfileText('RLV.Operatingmode', '', '');
-				IPS_SetVariableProfileValues ('RLV.Operatingmode', 0, 2, );
+				IPS_SetVariableProfileValues ('RLV.Operatingmode', 0, 2, 0);
 				IPS_SetVariableProfileAssociation('RLV.Operatingmode', 0x00, $this->Translate("Exhaust air"),"" , -1);
 				IPS_SetVariableProfileAssociation('RLV.Operatingmode', 0x01, $this->Translate("Heat recovery"),"" , -1);
 				IPS_SetVariableProfileAssociation('RLV.Operatingmode', 0x02, $this->Translate("supply air"),"" , -1);
