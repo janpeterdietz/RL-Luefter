@@ -126,27 +126,32 @@ declare(strict_types=1);
 
 			// Lüfter ID Auswerten
 			$id_read = substr($data, 4, 16);  
-
 			if ( strcmp($id_read, $id_luefter) != 0 )
 			{
 				IPS_LogMessage("Lüfter Auslesen ", "Lüfter ID falsch");
 				return;
 			}
 			
-			$func = hexdec( bin2hex($data[$position = 25]) )  ; 
+			$password = '1111';
+			$PW_len = hexdec( bin2hex($data[$position = 20]) ); 
+			if ($PW_len > 0)
+			{
+				$PW = substr($data, $position + 1, $PW_len);  
+				if ( strcmp($PW, $password) != 0 )
+				{
+					IPS_LogMessage("Lüfter Auslesen ", "PW Länge $PW_len Passwort falsch $PW");
+					//return;
+				}
+			}
 			
-			IPS_LogMessage("Lüfter Auslesen ", strlen($data) );
+			$position += ($PW_len +1);
 
-			if (($func == 0x06 ) or ($func == 0x04 ))
+			$func = hexdec( bin2hex($data[$position]) )  ; 
+			$position += 1;
+
+			if (($func == 0x06 ))
 			{    
-				if ($func == 0x06 )
-				{
-					$i = 26;
-				}
-				else
-				{
-					$i = 27;
-				}
+				$i = $position;
 				while ( $i <= (strlen($data) - 3) )
 				{   
 					$i = $this->read_paremter( $data, $i);
@@ -241,7 +246,6 @@ declare(strict_types=1);
 			$type = hex2bin('02');
 
 			$id_luefter = $this->ReadPropertyString("Vent_ident");
-			$id_luefter = 'DEFAULT_DEVICEID';
 			$id_luefter_blocksize = hex2bin('10');
 
 			$password = '1111';
@@ -259,8 +263,7 @@ declare(strict_types=1);
 			//B7 = Betriebsart des Ventilators
 			
 			$datablock = hex2bin('0102242544648388B7');  
-			$datablock = hex2bin('7C');  
-
+		
 			$checksum = $this->calc_checksumm( $start . $type . $id_luefter_blocksize . $id_luefter . $pw_blocksize . $password . $funcnumber . $datablock );
 
 			$content = $start . $type . $id_luefter_blocksize . $id_luefter . $pw_blocksize . $password . $funcnumber . $datablock . $checksum;
@@ -380,6 +383,12 @@ declare(strict_types=1);
 					$position = $position + 2;
 				break;
 
+				case 0xB9: // Anlagentyp
+					$AnlageTyp = hexdec( bin2hex($data[$position +1]));
+					IPS_LogMessage("Lüfter Auslesen ", "Analagentyp: $AnlageTyp ");
+					$position = $position + 3;
+				break;
+
 				case 0xB7: // Operating_mode
 					$mode = hexdec( bin2hex($data[$position +1]) ); 
 					$this->SetValue('Operatingmode', $mode);
@@ -388,8 +397,10 @@ declare(strict_types=1);
 
 				case 0xFE: // Spezial Befehl (Nächster Befehler hat Überlänge)
 					$position = $position + 2;
-				break;
+					//IPS_LogMessage("Lüfter Auslesen ", "Spezialbefehl: $Parameter_Id");
+					break;
 
+				//$Parameter_Id = hexdec($Parameter_Id);
 				default: // ???
 					IPS_LogMessage("Lüfter Auslesen ", "Parameter nicht bekannt: $Parameter_Id Position: $position");
 					return false;
@@ -453,6 +464,7 @@ declare(strict_types=1);
 					{
 						$value = 255;
 					}
+					$value1 = $value;
 					$value = dechex($value);
 					
 					if (strlen($value) <= 1)
@@ -482,6 +494,8 @@ declare(strict_types=1);
 					$para = hex2bin('44');
 
 					$datablock = $para . $value;
+
+					$datablock = $para . sprintf('%c', $value1)
 				break;   
 
 		
@@ -501,7 +515,7 @@ declare(strict_types=1);
 					}
 					else 
 					{
-						break;
+						IPS_LogMessage("Lüfter Operatingmode Setzen ", "Falsher Wert $value");
 					}
 					$para = hex2bin('B7');
 					$datablock = $para . $value;

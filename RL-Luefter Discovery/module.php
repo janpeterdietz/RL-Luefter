@@ -44,7 +44,7 @@ declare(strict_types=1);
 					'DataID' => '{4E2090FD-8113-C239-622E-BCA354396964}',
 					'Buffer' => $Payload,
 					'ClientIP'=> '239.255.255.250',
-					'ClientPort' => 0,
+					'ClientPort' => 4000,
 					'Broadcast' => true,
 					'EnableBroadcast' => true,
 				]));
@@ -55,7 +55,7 @@ declare(strict_types=1);
 		{
 			
 			$start = hex2bin('FDFD');
-			$type = hex2bin('02');
+			$type = hex2bin('02'); // Vorgegeben 
 
 			$id_luefter = 'DEFAULT_DEVICEID';
 			$id_luefter_blocksize = hex2bin('10');
@@ -74,10 +74,10 @@ declare(strict_types=1);
 			//88 = Filterwechel Aufforderung
 			//B7 = Betriebsart des Ventilators
 
-			$datablock = hex2bin('7C');  
+			$datablock = hex2bin('7C');  // Device ID auslesen
 
 			$checksum = $this->calc_checksumm( $start . $type . $id_luefter_blocksize . $id_luefter . $pw_blocksize . $password . $funcnumber . $datablock );
-
+			
 			$content = $start . $type . $id_luefter_blocksize . $id_luefter . $pw_blocksize . $password . $funcnumber . $datablock . $checksum;
 			
 			$this->SendData(utf8_encode($content));
