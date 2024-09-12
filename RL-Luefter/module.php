@@ -11,7 +11,7 @@ declare(strict_types=1);
 			$this->ConnectParent('{B62FAC0C-B4EE-9669-4FA3-334D4BD50E3D}');
 			
 
-			//if (!IPS_VariableProfileExists('RLV.Powermode')) 
+			if (!IPS_VariableProfileExists('RLV.Powermode')) 
 			{
 				IPS_CreateVariableProfile('RLV.Powermode', VARIABLETYPE_INTEGER);
 				IPS_SetVariableProfileText('RLV.Powermode', '', '');
@@ -21,7 +21,7 @@ declare(strict_types=1);
 				IPS_SetVariableProfileAssociation('RLV.Powermode', 0x03, $this->Translate("Level 3"),"" , -1);
 				IPS_SetVariableProfileAssociation('RLV.Powermode', 0xFF, $this->Translate("Manuel"),"" , -1);
 			}
-			
+
 
 			if (!IPS_VariableProfileExists('RLV.Operatingmode')) 
 			{
