@@ -22,7 +22,7 @@ declare(strict_types=1);
 				IPS_SetVariableProfileAssociation('RLV.Powermode', 0xFF, $this->Translate("Manuel"),"" , -1);
 			}
 
-			//if (!IPS_VariableProfileExists('RLV.Operatingmode')) 
+			if (!IPS_VariableProfileExists('RLV.Operatingmode')) 
 			{
 				IPS_CreateVariableProfile('RLV.Operatingmode', VARIABLETYPE_INTEGER);
 				IPS_SetVariableProfileText('RLV.Operatingmode', '', '');
