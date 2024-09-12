@@ -26,10 +26,10 @@ declare(strict_types=1);
 			{
 				IPS_CreateVariableProfile('RLV.Operatingmode', VARIABLETYPE_INTEGER);
 				IPS_SetVariableProfileText('RLV.Operatingmode', '', '');
-				IPS_SetVariableProfileValues ('RLV.Operatingmode', 1, 3, );
-				IPS_SetVariableProfileAssociation('RLV.Operatingmode', 0x01, $this->Translate("Exhaust Air"),"" , -1);
-				IPS_SetVariableProfileAssociation('RLV.Operatingmode', 0x02, $this->Translate("Heat recovery"),"" , -1);
-				IPS_SetVariableProfileAssociation('RLV.Operatingmode', 0x03, $this->Translate("supply air"),"" , -1);
+				IPS_SetVariableProfileValues ('RLV.Operatingmode', 0, 2, );
+				IPS_SetVariableProfileAssociation('RLV.Operatingmode', 0x00, $this->Translate("Exhaust air"),"" , -1);
+				IPS_SetVariableProfileAssociation('RLV.Operatingmode', 0x01, $this->Translate("Heat recovery"),"" , -1);
+				IPS_SetVariableProfileAssociation('RLV.Operatingmode', 0x02, $this->Translate("supply air"),"" , -1);
 			}
 
 			if (!IPS_VariableProfileExists('RLV.AlertLevel')) 
@@ -417,7 +417,6 @@ declare(strict_types=1);
 			switch ($ident)
 			{
 				case "State": 
-					
 					if ($value)
 					{
 						$value = hex2bin('01');
@@ -426,34 +425,18 @@ declare(strict_types=1);
 					{
 						$value = hex2bin('00');
 					}
-
 					$para = hex2bin('01');
 					$datablock = $para . $value;
 				break; 
 				
-				case "Powermode":    
-					if ($value == 1)
+				case "Powermode": 			
+					if (($value < 1) or ($value > 3) or ($value != 0xff))
 					{
-						$value = hex2bin('01');
-					}
-					else if ($value == 2)
-					{
-						$value = hex2bin('02');
-					}
-					else if ($value == 3)
-					{
-						$value = hex2bin('03');
-					}
-					else if ($value == 0xFF)
-					{
-						$value = hex2bin('FF');
-					}
-					else 
-					{
-						break;
+						IPS_LogMessage("Lüfter Powermode Setzen ", "Falsher Wert $value");
+						$value = 0xff;
 					}
 					$para = hex2bin('02');
-					$datablock = $para . $value;
+					$datablock = $para . $sprintf('%c', $value);
 				break; 
 
 				
@@ -464,61 +447,20 @@ declare(strict_types=1);
 					{
 						$value = 255;
 					}
-					$value1 = $value;
-					$value = dechex($value);
 					
-					if (strlen($value) <= 1)
-					{
-						if ($value == '0') $value = hex2bin('00');
-						if ($value == '1') $value = hex2bin('01');
-						if ($value == '2') $value = hex2bin('02');
-						if ($value == '3') $value = hex2bin('03');
-						if ($value == '4') $value = hex2bin('04');
-						if ($value == '5') $value = hex2bin('05');
-						if ($value == '6') $value = hex2bin('06');
-						if ($value == '7') $value = hex2bin('07');
-						if ($value == '8') $value = hex2bin('08');
-						if ($value == '9') $value = hex2bin('09');
-						if ($value == 'a') $value = hex2bin('0a');
-						if ($value == 'b') $value = hex2bin('0b');
-						if ($value == 'c') $value = hex2bin('0c');
-						if ($value == 'd') $value = hex2bin('0d');
-						if ($value == 'e') $value = hex2bin('0e');
-						if ($value == 'f') $value = hex2bin('0f');
-					}
-					else
-					{
-						$value = hex2bin($value);
-					}
-			
 					$para = hex2bin('44');
-
-					$datablock = $para . $value;
-
-					$datablock = $para . sprintf('%c', $value1)
+					$datablock = $para . sprintf('%c', $value);
 				break;   
 
 		
-				case "Operatingmode": 
-					
-					if ($value == 0)
-					{
-						$value = hex2bin('00');
-					}
-					else if ($value == 1)
-					{
-						$value = hex2bin('01');
-					}
-					else if ($value == 2)
-					{
-						$value = hex2bin('02');
-					}
-					else 
+				case "Operatingmode": 				
+					if (($value < 0) or ($value > 2))
 					{
 						IPS_LogMessage("Lüfter Operatingmode Setzen ", "Falsher Wert $value");
+						$value = 1;
 					}
 					$para = hex2bin('B7');
-					$datablock = $para . $value;
+					$datablock = $para . sprintf('%c', $value);
 				break;   
 
 				default:
