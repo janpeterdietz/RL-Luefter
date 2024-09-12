@@ -48,7 +48,6 @@ declare(strict_types=1);
 				IPS_SetVariableProfileText('RLV.mV', '', ' mV');
 			}
 
-
 			
 			$this->RegisterPropertyBoolean('Active', false);
 			$this->RegisterPropertyString('Vent_ident', false);
