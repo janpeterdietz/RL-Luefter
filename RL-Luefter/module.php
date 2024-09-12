@@ -438,7 +438,7 @@ declare(strict_types=1);
 					{
 						$value = 255;
 					}
-					$value1 = value;
+					$value1 = $value;
 					$value = dechex($value);
 					
 					if (strlen($value) <= 1)
