@@ -468,7 +468,7 @@ declare(strict_types=1);
 					$para = hex2bin('44');
 					$datablock = $para . $value;
 
-					$datablock = $para . sprintf('%c', $value1);
+					//$datablock = $para . sprintf('%c', $value1);
 
 				break;   
 
