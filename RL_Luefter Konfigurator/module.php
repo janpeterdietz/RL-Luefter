@@ -100,7 +100,7 @@ declare(strict_types=1);
 					$availableDevices[$count + $no_new_devices]['Vent_Type'] = IPS_GetProperty($instanceID,'Vent_Type' );
 					$availableDevices[$count + $no_new_devices]['instanceID'] = $instanceID;
 					$availableDevices[$count + $no_new_devices]['deviceactive'] = IPS_GetProperty($instanceID,'Active' );
-					$availableDevices[$count + $no_new_devices]['timerinterval'] = IPS_GetProperty($instanceID,'Interval' );
+					$availableDevices[$count + $no_new_devices]['timerinterval'] = IPS_GetProperty($instanceID,'UpdateInterval' );
 					$availableDevices[$count + $no_new_devices]['name'] = IPS_GetName($instanceID);
 					$count = $count+1;
 				}
