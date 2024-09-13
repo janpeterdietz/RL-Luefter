@@ -65,10 +65,9 @@ declare(strict_types=1);
 		{
 			//IPS_LogMessage('RL  Discovery Senddata', $Payload );
 			
-			//if ($this->HasActiveParent()) 
+			if ($this->HasActiveParent()) 
 			{
 				$this->SendDataToParent(json_encode([
-				
 					'DataID' => '{4E2090FD-8113-C239-622E-BCA354396964}',
 					'Buffer' => $Payload,
 					'ClientIP'=> '239.255.255.250',
