@@ -229,8 +229,9 @@ declare(strict_types=1);
 					'DataID' => '{4E2090FD-8113-C239-622E-BCA354396964}',
 					'Buffer' => $Payload,
 					'ClientIP' => $this->ReadPropertyString("IPAddress"),	
-            		'ClientPort' => 0,
-					'Broadcast' => false
+            		'ClientPort' => 4000,
+					'Broadcast' => false,
+					'EnableBroadcast' => false
 				]));
 			}
 		}
