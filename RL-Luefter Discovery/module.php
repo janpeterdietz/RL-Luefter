@@ -57,7 +57,7 @@ declare(strict_types=1);
 			$devices += $newdevice;
             $this->WriteAttributeString('Devices', json_encode($devices));
 
-			IPS_LogMessage('RL  Discovery ReceiveData', json_encode($devices) );
+			//IPS_LogMessage('RL  Discovery ReceiveData', json_encode($devices) );
 	
 		}
 
@@ -174,5 +174,9 @@ declare(strict_types=1);
 			}
 		}
 
+		public function GetNewDevices()
+        {
+			return ($this->ReadAttributeString('Devices'));
+		}
 
 	}
