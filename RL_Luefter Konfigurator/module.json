@@ -1,0 +1,16 @@
+{
+    "id": "{40C41688-AD0E-E8AB-4576-90CAAC7A2FA1}",
+    "name": "RL_Luefter Konfigurator",
+    "type": 4,
+    "vendor": "",
+    "aliases": [],
+    "parentRequirements": [
+        "{4E2090FD-8113-C239-622E-BCA354396964}"
+    ],
+    "childRequirements": [],
+    "implemented": [
+        "{58B9F909-B1CE-13FA-2BA8-1B377446CAED}"
+    ],
+    "prefix": "RL",
+    "url": ""
+}
