@@ -8,6 +8,9 @@ declare(strict_types=1);
 			//Never delete this line!
 			parent::Create();
 			$this->ForceParent('{82347F20-F541-41E1-AC5B-A636FD3AE2D8}'); //UDP Port anfordern
+
+			$this->RegisterAttributeString('Devices', '{}');
+
 		}
 
 		public function Destroy()
@@ -65,16 +68,188 @@ declare(strict_types=1);
 		public function ReceiveData($JSONString)
 		{
 			$data = json_decode($JSONString);
-			//IPS_LogMessage('Splitter RECV', utf8_decode($data->Buffer . ' - ' . $data->ClientIP . ' - ' . $data->ClientPort));
+			//IPS_LogMessage('Device RECV', $data->Buffer . ' - ' . $data->ClientIP . ' - ' . $data->ClientPort);
+			$ip = $data->ClientIP;
+			
+			$data = utf8_decode($data->Buffer) ;
+
+			// Lüfter ID Auswerten
+			$id_read = substr($data, 4, 16);  
+			$devices[$id_read] = ['ip'=> $ip];
+			
+			$password = '1111';
+			$PW_len = hexdec( bin2hex($data[$position = 20]) ); 
+			if ($PW_len > 0)
+			{
+				$PW = substr($data, $position + 1, $PW_len);  
+				if ( strcmp($PW, $password) != 0 )
+				{
+					IPS_LogMessage("Lüfter Auslesen ", "PW Länge $PW_len Passwort falsch $PW");
+					//return;
+				}
+			}
+			
+			$position += ($PW_len +1);
+
+			$func = hexdec( bin2hex($data[$position]) )  ; 
+			$position += 1;
+
+			if (($func == 0x06 ))
+			{    
+				$i = $position;
+				while ( $i <= (strlen($data) - 3) )
+				{   
+					$i = $this->read_paremter( $data, $i , $devices);
+					if  ( $i === false) 
+					{
+						IPS_LogMessage("Lüfter Auslesen ", "Anzahl Paramter Fehler");
+						return;    
+					};      
+				}
+			}
+			else
+			{
+				IPS_LogMessage("Lüfter Auslesen ", "func ungleich 6: $func");
+			}
+
+			//IPS_LogMessage('Splitter Receive', json_encode($devices));
+
+			if ($PW_len == 0)
+			{
+				$vent_id = 'new Device';
+			}
+			else
+			{
+				$vent_id = $id_read;
+			}
 
 			$this->SendDataToChildren(json_encode(
 				[
 				'DataID' => '{58B9F909-B1CE-13FA-2BA8-1B377446CAED}', 
-				'Buffer' => $data->Buffer, 
-				'ClientIP' => $data->ClientIP, 
-				'ClientPort' => $data->ClientPort
+				'Buffer' => json_encode($devices) ,
+				'VentID' => $vent_id,
 				]
 				));
 
 		}
+
+		private function read_paremter( string $data, int $position, &$devices )
+		{
+			$Parameter_Id = hexdec( bin2hex($data[$position]) ) ; 
+			$id_luefter = key($devices);
+
+			switch ($Parameter_Id)
+			{
+				case 0x01: // Status
+					$Status = hexdec( bin2hex($data[$position +1]) )  ; 
+					if ($Status == 0)
+					{
+						$Status = false;
+					}
+					else
+					{
+						$Status = true;
+					}
+
+					//$this->SetValue('State', $Status);
+					$devices[$id_luefter] += ['State'=> $Status];
+					$position = $position +2;
+				break;   
+
+				case 0x02: // Leistungsstufe
+					$Leistungsstufe = hexdec( bin2hex($data[$position +1]) ); 
+					//$this->SetValue('Powermode', $Leistungsstufe);
+					$devices[$id_luefter] += ['Powermode'=> $Leistungsstufe];
+					$position = $position +2;
+				break; 
+			
+				case 0x44: // Geschwindigkeit
+					$Speed = hexdec( bin2hex($data[$position +1]) )  ; 
+					//$this->SetValue('Speed', round($Speed * 100 /255));
+					$devices[$id_luefter] += ['Speed'=> round($Speed * 100 /255)];
+					$position = $position +2;
+				break; 
+
+				case 0x24: // Batterie Spannung RTC
+					$Level = 256 * hexdec( bin2hex($data[$position +2]) )  ;
+					$Level = $Level + hexdec( bin2hex($data[$position +1]) );
+					//$this->SetValue('RTC_Batterie_Voltage', $Level);
+					$devices[$id_luefter] += ['RTC_Batterie_Voltage'=> $Level];
+					$position = $position +3;
+				break;
+
+				case 0x25: // Feuchte
+					$Humidity = hexdec( bin2hex($data[$position +1]) )  ; 
+					//$this->SetValue('Humidity', $Humidity);
+					$devices[$id_luefter] += ['Humidity'=> $Humidity];
+					$position = $position +2;
+				break;
+
+				case 0x64: // Zeit bis Filterwechsel
+					//$this->SetValue('time_to_filter_cleaning', hexdec( bin2hex($data[$position +3]) ) . " Tage " . hexdec( bin2hex($data[$position + 2]) ) . " Stunden " . hexdec( bin2hex($data[$position +1]) ) . " Minuten"  );
+					$devices[$id_luefter] += ['time_to_filter_cleaning'=> (hexdec( bin2hex($data[$position +3]) ) . " Tage " . hexdec( bin2hex($data[$position + 2]) ) . " Stunden " . hexdec( bin2hex($data[$position +1]) ) . " Minuten" ) ];
+					$position = $position + 4;
+				break;
+
+				case 0x72: // Zeit gestuerter Betrieb
+					$position = $position + 2;
+				break;
+
+				case 0x7C: // ID
+					$ID= substr($data, $position +1, 16); 
+					//IPS_LogMessage('Vent_ID', $ID);
+					$devices[$id_luefter] += ['Vent_ID'=> $ID];
+					$position = $position + 17;
+				break;
+
+				case 0x83: // Alarm
+					$Alarm = hexdec( bin2hex($data[$position +1]) )  ; 
+					//$this->SetValue('Systemwarning', $Alarm);
+					$devices[$id_luefter] += ['Systemwarning'=> $Alarm];
+					$position = $position +2;
+				break;
+
+				case 0x88: // Filterwechsel Aufforderung
+					if (bin2hex($data[$position +1]) == 0)  
+					{
+						//$this->SetValue('Filtercleaning', false);
+						$devices[$id_luefter] += ['Filtercleaning'=> false];
+					}
+					else
+					{
+						//$this->SetValue('Filtercleaning', true);
+						$devices[$id_luefter] += ['Filtercleaning'=> true];
+					}
+					$position = $position + 2;
+				break;
+
+				case 0xB9: // Anlagentyp
+					$AnlageTyp = hexdec( bin2hex($data[$position +1]));
+					$devices[$id_luefter] += ['Ventilator Type'=> $AnlageTyp];
+					//IPS_LogMessage("Lüfter Auslesen ", "Analagentyp: $AnlageTyp ");
+					$position = $position + 3;
+				break;
+
+				case 0xB7: // Operating_mode
+					$mode = hexdec( bin2hex($data[$position +1]) ); 
+					//$this->SetValue('Operatingmode', $mode);
+					$devices[$id_luefter] += ['Operatingmode'=> $mode];
+					$position = $position +2;
+				break;
+
+				case 0xFE: // Spezial Befehl (Nächster Befehler hat Überlänge)
+					$position = $position + 2;
+					//IPS_LogMessage("Lüfter Auslesen ", "Spezialbefehl: $Parameter_Id");
+					break;
+
+				//$Parameter_Id = hexdec($Parameter_Id);
+				default: // ???
+					IPS_LogMessage("Lüfter Auslesen ", "Parameter nicht bekannt: $Parameter_Id Position: $position");
+					return false;
+				break;       
+			}			
+			
+			return  $position;
+		}
+
 	}

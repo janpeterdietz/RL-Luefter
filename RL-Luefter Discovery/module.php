@@ -9,6 +9,11 @@ declare(strict_types=1);
 			parent::Create();
 
 			$this->ConnectParent('{B62FAC0C-B4EE-9669-4FA3-334D4BD50E3D}');
+
+			$this->RegisterPropertyBoolean('Active', false);
+			$this->RegisterAttributeString('Devices', '{}');
+
+			$this->RegisterTimer("ScanTimer", 0, 'RL_ScanDevices(' . $this->InstanceID . ');');
 			
 		}
 
@@ -23,19 +28,42 @@ declare(strict_types=1);
 			//Never delete this line!
 			parent::ApplyChanges();
 
-			$this->ScanDevices();
+			$filter = '.*"VentID":.*';
+			$filter .= '.*' . '"' ."new Device". '"'. '.*';
+			
+			$this->SetReceiveDataFilter($filter);
+
+			if ($this->ReadPropertyBoolean('Active')) 
+			{
+                $this->ScanDevices();
+				$this->SetTimerInterval('ScanTimer', 60 * 1000);
+                $this->SetStatus(102);
+            } else {
+                $this->SetTimerInterval('ScanTimer', 0);
+                $this->SetStatus(104);
+            }
 		}
 
 		public function ReceiveData($JSONString)
 		{
-			$data = json_decode($JSONString);
-			//IPS_LogMessage('Device RECV', $data->Buffer . ' - ' . $data->ClientIP . ' - ' . $data->ClientPort);
+			//IPS_LogMessage('RL  Discovery ReceiveData', $JSONString);
+	
+			$data = json_decode($JSONString, true); // neune Geräte
+			//IPS_LogMessage('RL  Discovery ReceiveData', print_r($data, true));
 			
+			$newdevice = json_decode($data['Buffer'], true);
+        
+            $devices = json_decode($this->ReadAttributeString('Devices'), true); // lese vorhandene Geräte
+			$devices += $newdevice;
+            $this->WriteAttributeString('Devices', json_encode($devices));
+
+			IPS_LogMessage('RL  Discovery ReceiveData', json_encode($devices) );
+	
 		}
 
 		public function SendData(string $Payload)
 		{
-			IPS_LogMessage('RL  DISC', $Payload );
+			//IPS_LogMessage('RL  Discovery Senddata', $Payload );
 			
 			//if ($this->HasActiveParent()) 
 			{
@@ -53,7 +81,8 @@ declare(strict_types=1);
 
 		public function ScanDevices()
 		{
-			
+			$this->WriteAttributeString('Devices', '{}');
+
 			$start = hex2bin('FDFD');
 			$type = hex2bin('02'); // Vorgegeben 
 
