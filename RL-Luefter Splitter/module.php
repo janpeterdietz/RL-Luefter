@@ -215,7 +215,24 @@ declare(strict_types=1);
 
 				case 0xB9: // Anlagentyp
 					$AnlageTyp = hexdec( bin2hex($data[$position +1]));
-					$devices[$id_luefter] += ['Ventilator Type'=> $AnlageTyp];
+					switch ($AnlageTyp)
+					{
+						case 3:
+							$devices[$id_luefter] += ['Vent_Type'=> "TwinFresh Expert RX1-xxx V.2"];
+						break;
+						case 4:
+							$devices[$id_luefter] += ['Vent_Type'=> "TwinFresh Expert Duo RW-30 V.2"];
+						break;
+						case 5:
+							$devices[$id_luefter] += ['Vent_Type'=> "TwinFresh Expert RW-30 V.2"];
+						break;
+						default:
+							$devices[$id_luefter] += ['Vent_Type'=> "unbekannt"];
+						break;
+
+					}
+
+
 					$position = $position + 3;
 				break;
 

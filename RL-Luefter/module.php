@@ -54,6 +54,9 @@ declare(strict_types=1);
 			$this->RegisterPropertyString('Vent_ident', false);
 			$this->RegisterPropertyInteger("UpdateInterval", 60);
 			$this->RegisterPropertyString("IPAddress", "192.168.178.1");
+			$this->RegisterPropertyString("Vent_Type", "RL Lüfter");
+
+			
 			
 		
 			$this->RegisterVariableBoolean ("State", $this->Translate("State"),  "~Switch", 10) ;
