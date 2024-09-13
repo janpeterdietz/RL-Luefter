@@ -151,21 +151,18 @@ declare(strict_types=1);
 						$Status = true;
 					}
 
-					//$this->SetValue('State', $Status);
 					$devices[$id_luefter] += ['State'=> $Status];
 					$position = $position +2;
 				break;   
 
 				case 0x02: // Leistungsstufe
 					$Leistungsstufe = hexdec( bin2hex($data[$position +1]) ); 
-					//$this->SetValue('Powermode', $Leistungsstufe);
 					$devices[$id_luefter] += ['Powermode'=> $Leistungsstufe];
 					$position = $position +2;
 				break; 
 			
 				case 0x44: // Geschwindigkeit
 					$Speed = hexdec( bin2hex($data[$position +1]) )  ; 
-					//$this->SetValue('Speed', round($Speed * 100 /255));
 					$devices[$id_luefter] += ['Speed'=> round($Speed * 100 /255)];
 					$position = $position +2;
 				break; 
@@ -173,20 +170,17 @@ declare(strict_types=1);
 				case 0x24: // Batterie Spannung RTC
 					$Level = 256 * hexdec( bin2hex($data[$position +2]) )  ;
 					$Level = $Level + hexdec( bin2hex($data[$position +1]) );
-					//$this->SetValue('RTC_Batterie_Voltage', $Level);
 					$devices[$id_luefter] += ['RTC_Batterie_Voltage'=> $Level];
 					$position = $position +3;
 				break;
 
 				case 0x25: // Feuchte
 					$Humidity = hexdec( bin2hex($data[$position +1]) )  ; 
-					//$this->SetValue('Humidity', $Humidity);
 					$devices[$id_luefter] += ['Humidity'=> $Humidity];
 					$position = $position +2;
 				break;
 
 				case 0x64: // Zeit bis Filterwechsel
-					//$this->SetValue('time_to_filter_cleaning', hexdec( bin2hex($data[$position +3]) ) . " Tage " . hexdec( bin2hex($data[$position + 2]) ) . " Stunden " . hexdec( bin2hex($data[$position +1]) ) . " Minuten"  );
 					$devices[$id_luefter] += ['time_to_filter_cleaning'=> (hexdec( bin2hex($data[$position +3]) ) . " Tage " . hexdec( bin2hex($data[$position + 2]) ) . " Stunden " . hexdec( bin2hex($data[$position +1]) ) . " Minuten" ) ];
 					$position = $position + 4;
 				break;
@@ -197,14 +191,12 @@ declare(strict_types=1);
 
 				case 0x7C: // ID
 					$ID= substr($data, $position +1, 16); 
-					//IPS_LogMessage('Vent_ID', $ID);
 					$devices[$id_luefter] += ['Vent_ID'=> $ID];
 					$position = $position + 17;
 				break;
 
 				case 0x83: // Alarm
 					$Alarm = hexdec( bin2hex($data[$position +1]) )  ; 
-					//$this->SetValue('Systemwarning', $Alarm);
 					$devices[$id_luefter] += ['Systemwarning'=> $Alarm];
 					$position = $position +2;
 				break;
@@ -212,12 +204,10 @@ declare(strict_types=1);
 				case 0x88: // Filterwechsel Aufforderung
 					if (bin2hex($data[$position +1]) == 0)  
 					{
-						//$this->SetValue('Filtercleaning', false);
 						$devices[$id_luefter] += ['Filtercleaning'=> false];
 					}
 					else
 					{
-						//$this->SetValue('Filtercleaning', true);
 						$devices[$id_luefter] += ['Filtercleaning'=> true];
 					}
 					$position = $position + 2;
@@ -226,13 +216,11 @@ declare(strict_types=1);
 				case 0xB9: // Anlagentyp
 					$AnlageTyp = hexdec( bin2hex($data[$position +1]));
 					$devices[$id_luefter] += ['Ventilator Type'=> $AnlageTyp];
-					//IPS_LogMessage("Lüfter Auslesen ", "Analagentyp: $AnlageTyp ");
 					$position = $position + 3;
 				break;
 
 				case 0xB7: // Operating_mode
 					$mode = hexdec( bin2hex($data[$position +1]) ); 
-					//$this->SetValue('Operatingmode', $mode);
 					$devices[$id_luefter] += ['Operatingmode'=> $mode];
 					$position = $position +2;
 				break;
