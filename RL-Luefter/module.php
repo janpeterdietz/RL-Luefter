@@ -107,10 +107,12 @@ declare(strict_types=1);
 
 			$IPAddress = $this->ReadPropertyString("IPAddress");
 			$this->SetSummary($IPAddress);
-
+			
+			$Vent_ident = $this->ReadPropertyString("Vent_ident");
+			
 		
-			$filter = '.*"ClientIP":.*';
-			$filter .= '.*' . '"' . $IPAddress. '"'. '.*';
+			$filter = '.*"VentID":.*';
+			$filter .= '.*' . '"' . $Vent_ident. '"'. '.*';
 			
 			$this->SetReceiveDataFilter($filter);
 			
@@ -118,53 +120,46 @@ declare(strict_types=1);
 
 		public function ReceiveData($JSONString)
 		{
-			$data = json_decode($JSONString);
-			//IPS_LogMessage('Device RECV', $data->Buffer . ' - ' . $data->ClientIP . ' - ' . $data->ClientPort);
-			
-			$id_luefter = $this->ReadPropertyString("Vent_ident");
-			$data = utf8_decode($data->Buffer) ;
+			$data = json_decode($JSONString, true);
 
-			// Lüfter ID Auswerten
-			$id_read = substr($data, 4, 16);  
-			if ( strcmp($id_read, $id_luefter) != 0 )
+			$data = json_decode($data['Buffer'], true);
+			$key = key($data);
+		
+			if (array_key_exists('State', $data[$key]))
 			{
-				IPS_LogMessage("Lüfter Auslesen ", "Lüfter ID falsch");
-				return;
+				$this->SetValue('State', $data[$key]['State']);
 			}
-			
-			$password = '1111';
-			$PW_len = hexdec( bin2hex($data[$position = 20]) ); 
-			if ($PW_len > 0)
+			if (array_key_exists('Powermode', $data[$key]))
 			{
-				$PW = substr($data, $position + 1, $PW_len);  
-				if ( strcmp($PW, $password) != 0 )
-				{
-					IPS_LogMessage("Lüfter Auslesen ", "PW Länge $PW_len Passwort falsch $PW");
-					//return;
-				}
+				$this->SetValue('Powermode', $data[$key]['Powermode']);
 			}
-			
-			$position += ($PW_len +1);
-
-			$func = hexdec( bin2hex($data[$position]) )  ; 
-			$position += 1;
-
-			if (($func == 0x06 ))
-			{    
-				$i = $position;
-				while ( $i <= (strlen($data) - 3) )
-				{   
-					$i = $this->read_paremter( $data, $i);
-					if  ( $i === false) 
-					{
-						IPS_LogMessage("Lüfter Auslesen ", "Anzahl Paramter Fehler");
-						return;    
-					};      
-				}
-			}
-			else
+			if (array_key_exists('Speed', $data[$key]))
 			{
-				IPS_LogMessage("Lüfter Auslesen ", "func ungleich 6: $func");
+				$this->SetValue('Speed', $data[$key]['Speed']);
+			}
+			if (array_key_exists('RTC_Batterie_Voltage', $data[$key]))
+			{
+				$this->SetValue('RTC_Batterie_Voltage', $data[$key]['RTC_Batterie_Voltage']);
+			}
+			if (array_key_exists('Humidity', $data[$key]))
+			{
+				$this->SetValue('Humidity', $data[$key]['Humidity']);
+			}
+			if (array_key_exists('time_to_filter_cleaning', $data[$key]))
+			{
+				$this->SetValue('time_to_filter_cleaning', $data[$key]['time_to_filter_cleaning']);
+			}
+			if (array_key_exists('Systemwarning', $data[$key]))
+			{
+				$this->SetValue('Systemwarning', $data[$key]['Systemwarning']);
+			}
+			if (array_key_exists('Filtercleaning', $data[$key]))
+			{
+				$this->SetValue('Filtercleaning',  $data[$key]['Filtercleaning']);
+			}
+			if (array_key_exists('Operatingmode', $data[$key]))
+			{
+				$this->SetValue('Operatingmode', (bool) $data[$key]['Operatingmode']);
 			}
 		}
 
@@ -234,8 +229,9 @@ declare(strict_types=1);
 					'DataID' => '{4E2090FD-8113-C239-622E-BCA354396964}',
 					'Buffer' => $Payload,
 					'ClientIP' => $this->ReadPropertyString("IPAddress"),	
-            		'ClientPort' => 0,
-					'Broadcast' => false
+            		'ClientPort' => 4000,
+					'Broadcast' => false,
+					'EnableBroadcast' => false
 				]));
 			}
 		}
