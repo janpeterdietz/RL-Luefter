@@ -27,14 +27,11 @@ declare(strict_types=1);
 
 		public function GetConfigurationForm()
 		{	
-		
-			foreach (IPS_GetInstanceListByModuleID('{B6AC3538-BFB4-042F-3586-72B6FE863E3E}') as $instanceID)
-			{
-				$discoveryID = $instanceID;
-			}
-			R_ScanDevices($discoveryID);
+			
+			$discoveryID = IPS_GetInstanceListByModuleID('{B6AC3538-BFB4-042F-3586-72B6FE863E3E}')[0];
+			
+			RL_ScanDevices($discoveryID);
 			IPS_Sleep(2000);
-
 
 			//IPS_LogMessage('Konfigurator',  $discoveryID);
 
