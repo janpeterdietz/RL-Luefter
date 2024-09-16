@@ -72,8 +72,8 @@ declare(strict_types=1);
 
 		public function ScanDevices()
 		{
-			$this->SetBuffer('Devices', '{}');
-
+			$this->SetBuffer('Devices', '{}'); // gefundene Geräte aus Null setzen
+		
 			$start = hex2bin('FDFD');
 			$type = hex2bin('02'); // Vorgegeben 
 
@@ -112,7 +112,7 @@ declare(strict_types=1);
 
 			$newdevices = json_decode( $this->GetBuffer('Devices'), true);
 		
-			IPS_LogMessage('Discovery', print_r( $newdevices, true));
+			//IPS_LogMessage('Discovery', print_r( $newdevices, true));
 			
 			$availableDevices = [];
 			$count = 0;
