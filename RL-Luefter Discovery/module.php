@@ -33,7 +33,7 @@ declare(strict_types=1);
 			parent::ApplyChanges();
 
 		    $this->ScanDevices();
-			$this->SetTimerInterval('ScanTimer', 300 * 1000);
+			$this->SetTimerInterval('ScanTimer', 60 * 1000);
 		}
 
 		public function ReceiveData($JSONString)
@@ -72,6 +72,7 @@ declare(strict_types=1);
 
 		public function ScanDevices()
 		{
+			$this->SetTimerInterval('ScanTimer', 300 * 1000);
 			$this->SetBuffer('Devices', '{}'); // gefundene Geräte aus Null setzen
 		
 			$start = hex2bin('FDFD');
