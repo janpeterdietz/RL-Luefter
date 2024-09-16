@@ -11,10 +11,14 @@ declare(strict_types=1);
 			$this->ConnectParent('{B62FAC0C-B4EE-9669-4FA3-334D4BD50E3D}');
 
 			$this->RegisterPropertyBoolean('Active', false);
-			$this->RegisterAttributeString('Devices', '{}');
-
+			$this->SetBuffer('Devices', '{}');
 			$this->RegisterTimer("ScanTimer", 0, 'RL_ScanDevices(' . $this->InstanceID . ');');
 			
+		
+			$filter = '.*"VentID":.*';
+			$filter .= '.*' . '"' ."new Device". '"'. '.*';
+			
+			$this->SetReceiveDataFilter($filter);
 		}
 
 		public function Destroy()
@@ -28,20 +32,8 @@ declare(strict_types=1);
 			//Never delete this line!
 			parent::ApplyChanges();
 
-			$filter = '.*"VentID":.*';
-			$filter .= '.*' . '"' ."new Device". '"'. '.*';
-			
-			$this->SetReceiveDataFilter($filter);
-
-			if ($this->ReadPropertyBoolean('Active')) 
-			{
-                $this->ScanDevices();
-				$this->SetTimerInterval('ScanTimer', 60 * 1000);
-                $this->SetStatus(102);
-            } else {
-                $this->SetTimerInterval('ScanTimer', 0);
-                $this->SetStatus(104);
-            }
+		    $this->ScanDevices();
+			$this->SetTimerInterval('ScanTimer', 300 * 1000);
 		}
 
 		public function ReceiveData($JSONString)
@@ -53,9 +45,9 @@ declare(strict_types=1);
 			
 			$newdevice = json_decode($data['Buffer'], true);
         
-            $devices = json_decode($this->ReadAttributeString('Devices'), true); // lese vorhandene Geräte
+            $devices = json_decode($this->GetBuffer('Devices'), true); // lese vorhandene Geräte
 			$devices += $newdevice;
-            $this->WriteAttributeString('Devices', json_encode($devices));
+            $this->SetBuffer('Devices', json_encode($devices));
 
 			//IPS_LogMessage('RL  Discovery ReceiveData', json_encode($devices) );
 	
@@ -80,7 +72,7 @@ declare(strict_types=1);
 
 		public function ScanDevices()
 		{
-			$this->WriteAttributeString('Devices', '{}');
+			$this->SetBuffer('Devices', '{}');
 
 			$start = hex2bin('FDFD');
 			$type = hex2bin('02'); // Vorgegeben 
@@ -110,6 +102,132 @@ declare(strict_types=1);
 			
 			$this->SendData(utf8_encode($content));
 	
+		}
+
+
+		public function GetConfigurationForm()
+		{	
+			$this->ScanDevices();
+			IPS_Sleep(2000);
+
+			$newdevices = json_decode( $this->GetBuffer('Devices'), true);
+		
+			IPS_LogMessage('Discovery', print_r( $newdevices, true));
+			
+			$availableDevices = [];
+			$count = 0;
+			foreach($newdevices as $key => $device)
+			{
+    			//IPS_LogMessage('Govee Discovery', $key);
+			
+				$availableDevices[$count] = 
+					[
+						'name' =>  'RL Lüfter ', // . $device['sku'],
+						'InstanzID' => '0',
+						'Vent_ID' => $key,
+						'IPAddress' => $device['ip'],
+						'Vent_ID' => $device['Vent_ID'],
+						'Vent_Type' => $device['Vent_Type'],		
+							'create' => [	
+								'moduleID' => '{73E78C43-F612-1FED-F3FD-23B8999F504D}',
+								'configuration' => ['Vent_ident' => $key,
+													'IPAddress' => $device['ip'],
+													'Vent_Type' => $device['Vent_Type'],		
+													'Active' => true]
+								]
+					];
+				$count = $count+1;
+			}
+			$no_new_devices = $count; 
+
+			$count = 0;
+			foreach (IPS_GetInstanceListByModuleID('{73E78C43-F612-1FED-F3FD-23B8999F504D}') as $instanceID)
+			{
+				//IPS_LogMessage('Govee Configurator', $instanceID);
+				
+				$instance_match = false;
+				if ($no_new_devices >= 1)
+				{
+					foreach($availableDevices as  $key => $device)
+					{	
+						if ( ( $availableDevices[$key]['Vent_ID'] == IPS_GetProperty($instanceID,'Vent_ident') )
+						or   ( ( $availableDevices[$key]['IPAddress'] == IPS_GetProperty($instanceID,'IPAddress') ) and (IPS_GetProperty($instanceID,'Vent_ident') == ''))) 
+						{
+							$availableDevices[$key]['instanceID'] = $instanceID;
+							$availableDevices[$key]['Vent_ID'] = IPS_GetProperty($instanceID,'Vent_ident' );
+							$availableDevices[$key]['IPAddress'] = IPS_GetProperty($instanceID,'IPAddress' );
+							$availableDevices[$key]['Vent_Type'] = IPS_GetProperty($instanceID,'Vent_Type' );
+							$availableDevices[$key]['deviceactive'] = IPS_GetProperty($instanceID,'Active' );
+							$availableDevices[$key]['timerinterval'] = IPS_GetProperty($instanceID,'UpdateInterval' );
+							$availableDevices[$key]['name'] = IPS_GetName($instanceID);	
+							$instance_match = true;
+							$count = $count+1;
+						}
+					}
+				}	 
+				
+				if (!$instance_match)
+				{
+					$availableDevices[$count + $no_new_devices]['Vent_ID'] = IPS_GetProperty($instanceID,'Vent_ident' );
+					$availableDevices[$count + $no_new_devices]['IPAddress'] = IPS_GetProperty($instanceID,'IPAddress' );
+					$availableDevices[$count + $no_new_devices]['Vent_Type'] = IPS_GetProperty($instanceID,'Vent_Type' );
+					$availableDevices[$count + $no_new_devices]['instanceID'] = $instanceID;
+					$availableDevices[$count + $no_new_devices]['deviceactive'] = IPS_GetProperty($instanceID,'Active' );
+					$availableDevices[$count + $no_new_devices]['timerinterval'] = IPS_GetProperty($instanceID,'UpdateInterval' );
+					$availableDevices[$count + $no_new_devices]['name'] = IPS_GetName($instanceID);
+					$count = $count+1;
+				}
+			}
+
+			if (count($availableDevices) == 0)
+			{
+				$availableDevices[$count]['name'] = 'no devices found';	
+			}
+				
+
+			return json_encode([
+			
+				"actions" => [
+					[
+						'type' => 'Configurator', 
+						'caption'=> 'RL Lüfter Konfigurator',
+						'delete' => true,
+						'columns' => [
+								[
+									'name' => 'name',
+									'caption' => 'Name',
+									'width' => 'auto'
+								],
+								[
+									'name' => 'Vent_ID',
+									'caption' => 'Device Identifier',
+									'width' => '200px'
+								],
+								[
+									'name' => 'Vent_Type',
+									'caption' => 'Ventilator Type',
+									'width' => '300px'
+								],
+								[
+									'name' => 'IPAddress',
+									'caption' => 'IP Adress',
+									'width' => '150px'
+								],
+								[
+									'name' =>'deviceactive',
+									'caption' => 'Active',
+									'width' => '150px'
+								],
+								[
+									'name' =>'timerinterval',
+									'caption' => 'Timer Interval',
+									'width' => '150px'
+								]
+						],
+						'values' => $availableDevices
+					]
+				]
+			]);
 		}
 
 	
@@ -172,11 +290,6 @@ declare(strict_types=1);
 			{
 				return false;
 			}
-		}
-
-		public function GetNewDevices()
-        {
-			return ($this->ReadAttributeString('Devices'));
 		}
 
 	}
