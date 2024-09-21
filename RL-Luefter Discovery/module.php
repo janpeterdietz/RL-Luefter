@@ -117,10 +117,9 @@ declare(strict_types=1);
 			
 			$availableDevices = [];
 			$count = 0;
+
 			foreach($newdevices as $key => $device)
 			{
-    			//IPS_LogMessage('Govee Discovery', $key);
-			
 				$availableDevices[$count] = 
 					[
 						'name' =>  'RL Lüfter ', // . $device['sku'],
@@ -139,9 +138,9 @@ declare(strict_types=1);
 					];
 				$count = $count+1;
 			}
-			$no_new_devices = $count; 
 
-			$count = 0;
+			$no_new_devices = $count; 
+			$lostDevices = [];
 			foreach (IPS_GetInstanceListByModuleID('{73E78C43-F612-1FED-F3FD-23B8999F504D}') as $instanceID)
 			{
 				//IPS_LogMessage('Govee Configurator', $instanceID);
@@ -162,7 +161,6 @@ declare(strict_types=1);
 							$availableDevices[$key]['timerinterval'] = IPS_GetProperty($instanceID,'UpdateInterval' );
 							$availableDevices[$key]['name'] = IPS_GetName($instanceID);	
 							$instance_match = true;
-							$count = $count+1;
 						}
 					}
 				}	 
@@ -176,8 +174,12 @@ declare(strict_types=1);
 					$availableDevices[$count + $no_new_devices]['deviceactive'] = IPS_GetProperty($instanceID,'Active' );
 					$availableDevices[$count + $no_new_devices]['timerinterval'] = IPS_GetProperty($instanceID,'UpdateInterval' );
 					$availableDevices[$count + $no_new_devices]['name'] = IPS_GetName($instanceID);
-					$count = $count+1;
 				}
+			}
+
+			foreach($lostDevices as $key => $device)
+			{	
+				$availableDevices[$key+$no_new_devices] = $lostDevices[$key];
 			}
 
 			if (count($availableDevices) == 0)
