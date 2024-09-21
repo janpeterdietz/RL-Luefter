@@ -97,9 +97,7 @@ declare(strict_types=1);
 
 			$datablock = hex2bin('7C');  // Device ID auslesen
 
-			$checksum = $this->calc_checksumm( $start . $type . $id_luefter_blocksize . $id_luefter . $pw_blocksize . $password . $funcnumber . $datablock );
-			
-			$content = $start . $type . $id_luefter_blocksize . $id_luefter . $pw_blocksize . $password . $funcnumber . $datablock . $checksum;
+			$content = $start . $type . $id_luefter_blocksize . $id_luefter . $pw_blocksize . $password . $funcnumber . $datablock;
 			
 			$this->SendData(utf8_encode($content));
 	
@@ -112,8 +110,6 @@ declare(strict_types=1);
 			IPS_Sleep(2000);
 
 			$newdevices = json_decode( $this->GetBuffer('Devices'), true);
-		
-			//IPS_LogMessage('Discovery', print_r( $newdevices, true));
 			
 			$availableDevices = [];
 			$count = 0;
@@ -230,68 +226,6 @@ declare(strict_types=1);
 					]
 				]
 			]);
-		}
-
-	
-		private function Calc_Checksumm( string $data )
-		{
-			$i = 0; 
-			$chksum = 0;
-			$chksum2 = hex2bin('0000');
-			$chksumHexNeu = hex2bin('0000');
-		
-			$size = strlen($data);
-		   
-			if(  ($data[0] == hex2bin('FD')) and ($data[1] == hex2bin('FD')) )         //and ($data[1] == "\xFD"))
-			{
-				for($i = 2; $i <= ($size-1); $i++)
-				{
-					$chksum = $chksum + ord($data[$i]);
-				}
-				
-				$chksumHex = dechex($chksum);
-			   
-				$size = strlen($chksumHex);
-				if ($size <= 1)
-				{
-					$chksumHexNeu[0] = '0';
-					$chksumHexNeu[1] = '0';
-					$chksumHexNeu[2] = '0';
-					$chksumHexNeu[3] = $chksumHex[0];
-				}
-				else if ($size == 2)
-				{
-					$chksumHexNeu[0] = '0';
-					$chksumHexNeu[1] = '0';
-					$chksumHexNeu[2] = $chksumHex[0];
-					$chksumHexNeu[3] = $chksumHex[1];
-				}
-				else if ($size == 3)
-				{
-					$chksumHexNeu[0] = '0';
-					$chksumHexNeu[1] = $chksumHex[0];
-					$chksumHexNeu[2] = $chksumHex[1];
-					$chksumHexNeu[3] = $chksumHex[2];
-				}
-				else if ($size == 4)
-				{
-					$chksumHexNeu[0] = $chksumHex[0];
-					$chksumHexNeu[1] = $chksumHex[1];
-					$chksumHexNeu[2] = $chksumHex[2];
-					$chksumHexNeu[3] = $chksumHex[3];
-				}
-				else
-				{
-					return false;
-				}
-		
-				$chksum2 = hex2bin($chksumHexNeu);
-				return $chksum2[1] . $chksum2[0];
-			}
-			else
-			{
-				return false;
-			}
 		}
 
 	}

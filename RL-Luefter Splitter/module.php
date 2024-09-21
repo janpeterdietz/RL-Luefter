@@ -51,11 +51,16 @@ declare(strict_types=1);
 			$data = json_decode($JSONString);
 			//IPS_LogMessage('Splitter FRWD', utf8_decode($data->Buffer . ' - ' . $data->ClientIP . ' - ' . $data->ClientPort));
 
+			$payload = utf8_decode($data->Buffer);
+			$checksum = $this->calc_checksumm( $payload);
+			$payload = $payload . $checksum;
+			
+
+
 			$this->SendDataToParent(json_encode(
 				[
 				'DataID' => '{8E4D9B23-E0F2-1E05-41D8-C21EA53B8706}', 
-				'Buffer' => $data->Buffer, 
-			
+				'Buffer' => utf8_encode($payload), 
 				'ClientIP' => $data->ClientIP,
             	'ClientPort' => $data->ClientPort,
 				'EnableBroadcast' => true,
@@ -255,6 +260,67 @@ declare(strict_types=1);
 			}			
 			
 			return  $position;
+		}
+
+		private function Calc_Checksumm( string $data )
+		{
+			$i = 0; 
+			$chksum = 0;
+			$chksum2 = hex2bin('0000');
+			$chksumHexNeu = hex2bin('0000');
+		
+			$size = strlen($data);
+		   
+			if(  ($data[0] == hex2bin('FD')) and ($data[1] == hex2bin('FD')) )         //and ($data[1] == "\xFD"))
+			{
+				for($i = 2; $i <= ($size-1); $i++)
+				{
+					$chksum = $chksum + ord($data[$i]);
+				}
+				
+				$chksumHex = dechex($chksum);
+			   
+				$size = strlen($chksumHex);
+				if ($size <= 1)
+				{
+					$chksumHexNeu[0] = '0';
+					$chksumHexNeu[1] = '0';
+					$chksumHexNeu[2] = '0';
+					$chksumHexNeu[3] = $chksumHex[0];
+				}
+				else if ($size == 2)
+				{
+					$chksumHexNeu[0] = '0';
+					$chksumHexNeu[1] = '0';
+					$chksumHexNeu[2] = $chksumHex[0];
+					$chksumHexNeu[3] = $chksumHex[1];
+				}
+				else if ($size == 3)
+				{
+					$chksumHexNeu[0] = '0';
+					$chksumHexNeu[1] = $chksumHex[0];
+					$chksumHexNeu[2] = $chksumHex[1];
+					$chksumHexNeu[3] = $chksumHex[2];
+				}
+				else if ($size == 4)
+				{
+					$chksumHexNeu[0] = $chksumHex[0];
+					$chksumHexNeu[1] = $chksumHex[1];
+					$chksumHexNeu[2] = $chksumHex[2];
+					$chksumHexNeu[3] = $chksumHex[3];
+				}
+				else
+				{
+					return false;
+				}
+		
+				$chksum2 = hex2bin($chksumHexNeu);
+				return $chksum2[1] . $chksum2[0];
+			}
+			else
+			{
+				return false;
+			}
 		}
 
 	}

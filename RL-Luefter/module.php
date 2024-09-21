@@ -263,9 +263,7 @@ declare(strict_types=1);
 			
 			$datablock = hex2bin('0102242544648388B7');  
 		
-			$checksum = $this->calc_checksumm( $start . $type . $id_luefter_blocksize . $id_luefter . $pw_blocksize . $password . $funcnumber . $datablock );
-
-			$content = $start . $type . $id_luefter_blocksize . $id_luefter . $pw_blocksize . $password . $funcnumber . $datablock . $checksum;
+			$content = $start . $type . $id_luefter_blocksize . $id_luefter . $pw_blocksize . $password . $funcnumber . $datablock;// . $checksum;
 			
 			$this->SendData(utf8_encode($content));
 	
@@ -276,7 +274,6 @@ declare(strict_types=1);
 			$start = hex2bin('FDFD');
 			$type = hex2bin('02');
 
-			//$id_luefter = '0028001856565108'; // Schlafzimmer
 			$id_luefter = $this->ReadPropertyString("Vent_ident");
 			$id_luefter_blocksize = hex2bin('10');
 
@@ -285,9 +282,7 @@ declare(strict_types=1);
 			
 			$funcnumber = hex2bin('03'); // Parameter Schreiben mit Antwort
 
-			$checksum = $this->Calc_Checksumm( $start . $type . $id_luefter_blocksize . $id_luefter . $pw_blocksize . $password . $funcnumber . $datablock );
-
-			$content = $start . $type . $id_luefter_blocksize . $id_luefter . $pw_blocksize . $password . $funcnumber . $datablock . $checksum;
+			$content = $start . $type . $id_luefter_blocksize . $id_luefter . $pw_blocksize . $password . $funcnumber . $datablock;// . $checksum;
 
 			$this->SendData(utf8_encode($content));
 		}
@@ -469,67 +464,5 @@ declare(strict_types=1);
 
 			return $datablock;
 		}
-
-		private function Calc_Checksumm( string $data )
-		{
-			$i = 0; 
-			$chksum = 0;
-			$chksum2 = hex2bin('0000');
-			$chksumHexNeu = hex2bin('0000');
-		
-			$size = strlen($data);
-		   
-			if(  ($data[0] == hex2bin('FD')) and ($data[1] == hex2bin('FD')) )         //and ($data[1] == "\xFD"))
-			{
-				for($i = 2; $i <= ($size-1); $i++)
-				{
-					$chksum = $chksum + ord($data[$i]);
-				}
-				
-				$chksumHex = dechex($chksum);
-			   
-				$size = strlen($chksumHex);
-				if ($size <= 1)
-				{
-					$chksumHexNeu[0] = '0';
-					$chksumHexNeu[1] = '0';
-					$chksumHexNeu[2] = '0';
-					$chksumHexNeu[3] = $chksumHex[0];
-				}
-				else if ($size == 2)
-				{
-					$chksumHexNeu[0] = '0';
-					$chksumHexNeu[1] = '0';
-					$chksumHexNeu[2] = $chksumHex[0];
-					$chksumHexNeu[3] = $chksumHex[1];
-				}
-				else if ($size == 3)
-				{
-					$chksumHexNeu[0] = '0';
-					$chksumHexNeu[1] = $chksumHex[0];
-					$chksumHexNeu[2] = $chksumHex[1];
-					$chksumHexNeu[3] = $chksumHex[2];
-				}
-				else if ($size == 4)
-				{
-					$chksumHexNeu[0] = $chksumHex[0];
-					$chksumHexNeu[1] = $chksumHex[1];
-					$chksumHexNeu[2] = $chksumHex[2];
-					$chksumHexNeu[3] = $chksumHex[3];
-				}
-				else
-				{
-					return false;
-				}
-		
-				$chksum2 = hex2bin($chksumHexNeu);
-				return $chksum2[1] . $chksum2[0];
-			}
-			else
-			{
-				return false;
-			}
-		}
-
 
 	}
