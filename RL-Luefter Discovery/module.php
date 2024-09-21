@@ -141,39 +141,38 @@ declare(strict_types=1);
 
 			$no_new_devices = $count; 
 			$lostDevices = [];
+			$count = 0;
 			foreach (IPS_GetInstanceListByModuleID('{73E78C43-F612-1FED-F3FD-23B8999F504D}') as $instanceID)
 			{
 				//IPS_LogMessage('Govee Configurator', $instanceID);
 				
 				$instance_match = false;
-				if ($no_new_devices >= 1)
-				{
-					foreach($availableDevices as  $key => $device)
-					{	
-						if ( ( $availableDevices[$key]['Vent_ID'] == IPS_GetProperty($instanceID,'Vent_ident') )
-						or   ( ( $availableDevices[$key]['IPAddress'] == IPS_GetProperty($instanceID,'IPAddress') ) and (IPS_GetProperty($instanceID,'Vent_ident') == ''))) 
-						{
-							$availableDevices[$key]['instanceID'] = $instanceID;
-							$availableDevices[$key]['Vent_ID'] = IPS_GetProperty($instanceID,'Vent_ident' );
-							$availableDevices[$key]['IPAddress'] = IPS_GetProperty($instanceID,'IPAddress' );
-							$availableDevices[$key]['Vent_Type'] = IPS_GetProperty($instanceID,'Vent_Type' );
-							$availableDevices[$key]['deviceactive'] = IPS_GetProperty($instanceID,'Active' );
-							$availableDevices[$key]['timerinterval'] = IPS_GetProperty($instanceID,'UpdateInterval' );
-							$availableDevices[$key]['name'] = IPS_GetName($instanceID);	
-							$instance_match = true;
-						}
+				foreach($availableDevices as  $key => $device)
+				{	
+					if ( ( $availableDevices[$key]['Vent_ID'] == IPS_GetProperty($instanceID,'Vent_ident') )
+					or   ( ( $availableDevices[$key]['IPAddress'] == IPS_GetProperty($instanceID,'IPAddress') ) and (IPS_GetProperty($instanceID,'Vent_ident') == ''))) 
+					{
+						$availableDevices[$key]['instanceID'] = $instanceID;
+						$availableDevices[$key]['Vent_ID'] = IPS_GetProperty($instanceID,'Vent_ident' );
+						$availableDevices[$key]['IPAddress'] = IPS_GetProperty($instanceID,'IPAddress' );
+						$availableDevices[$key]['Vent_Type'] = IPS_GetProperty($instanceID,'Vent_Type' );
+						$availableDevices[$key]['deviceactive'] = IPS_GetProperty($instanceID,'Active' );
+						$availableDevices[$key]['timerinterval'] = IPS_GetProperty($instanceID,'UpdateInterval' );
+						$availableDevices[$key]['name'] = IPS_GetName($instanceID);	
+						$instance_match = true;
 					}
-				}	 
-				
+				}
+			
 				if (!$instance_match)
 				{
-					$availableDevices[$count + $no_new_devices]['Vent_ID'] = IPS_GetProperty($instanceID,'Vent_ident' );
-					$availableDevices[$count + $no_new_devices]['IPAddress'] = IPS_GetProperty($instanceID,'IPAddress' );
-					$availableDevices[$count + $no_new_devices]['Vent_Type'] = IPS_GetProperty($instanceID,'Vent_Type' );
-					$availableDevices[$count + $no_new_devices]['instanceID'] = $instanceID;
-					$availableDevices[$count + $no_new_devices]['deviceactive'] = IPS_GetProperty($instanceID,'Active' );
-					$availableDevices[$count + $no_new_devices]['timerinterval'] = IPS_GetProperty($instanceID,'UpdateInterval' );
-					$availableDevices[$count + $no_new_devices]['name'] = IPS_GetName($instanceID);
+					$lostDevices[$count]['Vent_ID'] = IPS_GetProperty($instanceID,'Vent_ident' );
+					$lostDevices[$count]['IPAddress'] = IPS_GetProperty($instanceID,'IPAddress' );
+					$lostDevices[$count]['Vent_Type'] = IPS_GetProperty($instanceID,'Vent_Type' );
+					$lostDevices[$count]['instanceID'] = $instanceID;
+					$lostDevices[$count]['deviceactive'] = IPS_GetProperty($instanceID,'Active' );
+					$lostDevices[$count]['timerinterval'] = IPS_GetProperty($instanceID,'UpdateInterval' );
+					$lostDevices[$count]['name'] = IPS_GetName($instanceID);
+					$count = $count +1;
 				}
 			}
 
@@ -184,7 +183,7 @@ declare(strict_types=1);
 
 			if (count($availableDevices) == 0)
 			{
-				$availableDevices[$count]['name'] = 'no devices found';	
+				$availableDevices[0]['name'] = 'no devices found';	
 			}
 				
 
