@@ -162,7 +162,7 @@ declare(strict_types=1);
 			}
 			if (array_key_exists('Operatingmode', $data[$key]))
 			{
-				$this->SetValue('Operatingmode', (bool) $data[$key]['Operatingmode']);
+				$this->SetValue('Operatingmode',  $data[$key]['Operatingmode']);
 			}
 		}
 
@@ -296,122 +296,7 @@ declare(strict_types=1);
 			$this->SendData(utf8_encode($content));
 		}
 
-		private function read_paremter( string $data, int $position )
-		{
-
-			$Parameter_Id = hexdec( bin2hex($data[$position]) ) ; 
-
-			//IPS_LogMessage("Lüfter Auslesen ", "Parameter $Parameter_Id");
-			
-			switch ($Parameter_Id)
-			{
-				case 0x01: // Status
-					$Status = hexdec( bin2hex($data[$position +1]) )  ; 
-					if ($Status == 0)
-					{
-						$Status = false;
-					}
-					else
-					{
-						$Status = true;
-					}
-
-					$this->SetValue('State', $Status);
-					$position = $position +2;
-				break;   
-
-				case 0x02: // Leistungsstufe
-					$Leistungsstufe = hexdec( bin2hex($data[$position +1]) ); 
-					$this->SetValue('Powermode', $Leistungsstufe);
-					$position = $position +2;
-				break; 
-			
-				case 0x44: // Geschwindigkeit
-					$Speed = hexdec( bin2hex($data[$position +1]) )  ; 
-					
-					if ($Speed == 0)
-					{
-						$this->SetValue('Speed', 0);
-					}
-					else
-					{
-						$this->SetValue('Speed', round($Speed * 100 /255));
-					}
-					$position = $position +2;
-				break; 
-
-				case 0x24: // Batterie Spannung RTC
-					$Level = 256 * hexdec( bin2hex($data[$position +2]) )  ;
-					$Level = $Level + hexdec( bin2hex($data[$position +1]) );
-					$this->SetValue('RTC_Batterie_Voltage', $Level);
-					$position = $position +3;
-				break;
-
-				case 0x25: // Feuchte
-					$Humidity = hexdec( bin2hex($data[$position +1]) )  ; 
-					$this->SetValue('Humidity', $Humidity);
-					$position = $position +2;
-				break;
-
-				case 0x64: // Zeit bis Filterwechsel
-					$this->SetValue('time_to_filter_cleaning', hexdec( bin2hex($data[$position +3]) ) . " Tage " . hexdec( bin2hex($data[$position + 2]) ) . " Stunden " . hexdec( bin2hex($data[$position +1]) ) . " Minuten"  );
-					$position = $position + 4;
-				break;
-
-				case 0x72: // Zeit gestuerter Betrieb
-					$position = $position + 2;
-				break;
-
-				case 0x7C: // ID
-					$ID= substr($data, $position +1, 16); 
-					IPS_LogMessage('Lüfter ID', $ID);
-					$position = $position + 17;
-				break;
-
-				case 0x83: // Alarm
-					$Alarm = hexdec( bin2hex($data[$position +1]) )  ; 
-					$this->SetValue('Systemwarning', $Alarm);
-					$position = $position +2;
-				break;
-
-				case 0x88: // Filterwechsel Aufforderung
-					if (bin2hex($data[$position +1]) == 0)  
-					{
-						$this->SetValue('Filtercleaning', false);
-					}
-					else
-					{
-						$this->SetValue('Filtercleaning', true);
-					}
-					$position = $position + 2;
-				break;
-
-				case 0xB9: // Anlagentyp
-					$AnlageTyp = hexdec( bin2hex($data[$position +1]));
-					IPS_LogMessage("Lüfter Auslesen ", "Analagentyp: $AnlageTyp ");
-					$position = $position + 3;
-				break;
-
-				case 0xB7: // Operating_mode
-					$mode = hexdec( bin2hex($data[$position +1]) ); 
-					$this->SetValue('Operatingmode', $mode);
-					IPS_LogMessage("Lüfter Auslesen ", "Operating_mode: $mode ");
-					$position = $position +2;
-				break;
-
-				case 0xFE: // Spezial Befehl (Nächster Befehler hat Überlänge)
-					$position = $position + 2;
-					//IPS_LogMessage("Lüfter Auslesen ", "Spezialbefehl: $Parameter_Id");
-					break;
-
-				//$Parameter_Id = hexdec($Parameter_Id);
-				default: // ???
-					IPS_LogMessage("Lüfter Auslesen ", "Parameter nicht bekannt: $Parameter_Id Position: $position");
-					return false;
-				break;       
-			}			
-			
-			return  $position;
+	
 		}
 
 		private function translate_paramter( string $ident, int $value)
