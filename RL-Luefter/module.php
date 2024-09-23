@@ -139,7 +139,7 @@ declare(strict_types=1);
 				}
 				else
 				{
-					IPS_SetHidden($this->GetIDForIdent('Powermode'), false);
+					IPS_SetHidden($this->GetIDForIdent('Powermode'), true);
 				}
 			}
 			if (array_key_exists('Speed', $data[$key]))
