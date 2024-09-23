@@ -224,7 +224,7 @@ declare(strict_types=1);
             }
         }
 
-		public function SendData(string $Payload)
+		private function SendData(string $Payload)
 		{
 			if ($this->HasActiveParent()) 
 			{
