@@ -239,7 +239,7 @@ declare(strict_types=1);
 			}
 		}
 
-		public function RequestStatus()
+		private function RequestStatus()
 		{
 			$start = hex2bin('FDFD');
 			$type = hex2bin('02');
