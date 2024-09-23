@@ -296,9 +296,6 @@ declare(strict_types=1);
 			$this->SendData(utf8_encode($content));
 		}
 
-	
-		}
-
 		private function translate_paramter( string $ident, int $value)
 		{
     		//IPS_LogMessage("Lüfter Parameter Setzen ", "Name: $ident Wert: $value");
