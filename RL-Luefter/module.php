@@ -433,9 +433,9 @@ declare(strict_types=1);
 				break; 
 				
 				case "Powermode": 			
-					if (($value < 1) or ($value > 3) or ($value != 0xff))
+					if (($value < 1) or ($value > 3) or ($value != 255))
 					{
-						IPS_LogMessage("Lüfter Powermode Setzen ", "Falsher Wert $value");
+						IPS_LogMessage("Lüfter Powermode Setzen ", "Falscher Wert $value");
 						$value = 0xff;
 					}
 					$para = hex2bin('02');
