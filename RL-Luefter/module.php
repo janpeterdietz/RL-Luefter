@@ -457,10 +457,10 @@ declare(strict_types=1);
 
 		
 				case "Operatingmode": 				
-					//if (($value < 0) or ($value > 2))
+					if (($value < 0) or ($value > 2))
 					{
 						IPS_LogMessage("Lüfter Operatingmode Setzen ", "Falsher Wert $value");
-						//$value = 1;
+						$value = 1;
 					}
 					$para = hex2bin('B7');
 					$datablock = $para . sprintf('%c', $value);
