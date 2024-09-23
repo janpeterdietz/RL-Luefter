@@ -135,11 +135,11 @@ declare(strict_types=1);
 				$this->SetValue('Powermode', $powermode = $data[$key]['Powermode']);
 				if ($powermode == 255)
 				{
-					IPS_SetHidden($this->GetIDForIdent('Powermode'), false);
+					IPS_SetHidden($this->GetIDForIdent('Speed'), false);
 				}
 				else
 				{
-					IPS_SetHidden($this->GetIDForIdent('Powermode'), true);
+					IPS_SetHidden($this->GetIDForIdent('Speed'), true);
 				}
 			}
 			if (array_key_exists('Speed', $data[$key]))
