@@ -56,8 +56,6 @@ declare(strict_types=1);
 			$this->RegisterPropertyString("IPAddress", "192.168.178.1");
 			$this->RegisterPropertyString("Vent_Type", "RL Lüfter");
 
-			
-			
 		
 			$this->RegisterVariableBoolean ("State", $this->Translate("State"),  "~Switch", 10) ;
 			$this->RegisterVariableInteger('Powermode', $this->Translate('Powermode'), 'RLV.Powermode', 20);
@@ -76,7 +74,7 @@ declare(strict_types=1);
 			$this->EnableAction('Speed');
 			$this->EnableAction('Operatingmode');
 
-			$this->RegisterTimer("UpdateSensorData", ($this->ReadPropertyInteger("UpdateInterval"))*1000, 'RL_RequestStatus(' . $this->InstanceID . ');');
+			$this->RegisterTimer("UpdateData", ($this->ReadPropertyInteger("UpdateInterval"))*1000, 'RL_RequestStatus(' . $this->InstanceID . ');');
 
 			$this->RegisterAttributeString("IP_Adress", ""); 
 
@@ -98,11 +96,11 @@ declare(strict_types=1);
 			{
 				$this->RequestStatus();
 		
-				$this->SetTimerInterval('UpdateSensorData', $this->ReadPropertyInteger('UpdateInterval') * 1000);
+				$this->SetTimerInterval('UpdateData', $this->ReadPropertyInteger('UpdateInterval') * 1000);
                 $this->SetStatus(102);
             } else 
 			{
-                $this->SetTimerInterval('UpdateSensorData', 0);
+                $this->SetTimerInterval('UpdateData', 0);
                 $this->SetStatus(104);
             }
 
@@ -139,6 +137,8 @@ declare(strict_types=1);
 			if (array_key_exists('Speed', $data[$key]))
 			{
 				$this->SetValue('Speed', $data[$key]['Speed']);
+
+				IPS_LogMessage("RL_Lüfter", "Speed $data[$key]['Speed']");
 			}
 			if (array_key_exists('RTC_Batterie_Voltage', $data[$key]))
 			{
