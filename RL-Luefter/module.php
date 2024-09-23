@@ -266,7 +266,16 @@ declare(strict_types=1);
 			$content = $start . $type . $id_luefter_blocksize . $id_luefter . $pw_blocksize . $password . $funcnumber . $datablock;// . $checksum;
 			
 			$this->SendData(utf8_encode($content));
-	
+		}
+
+		
+		
+		public function ResetFilterClean( )
+		{
+			
+			$cleaned = hex2bin('65ff'); // Filterwarnung zurückstezen
+			
+			$this->send_parameter($cleaned);
 		}
 
 		private function send_parameter( string $datablock  )
@@ -430,7 +439,7 @@ declare(strict_types=1);
 						$value = 0xff;
 					}
 					$para = hex2bin('02');
-					$datablock = $para . $sprintf('%c', $value);
+					$datablock = $para . sprintf('%c', $value);
 				break; 
 
 				
