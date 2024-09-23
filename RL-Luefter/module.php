@@ -446,7 +446,7 @@ declare(strict_types=1);
 				case "Speed":
 					$value = (integer) round($value * 255 / 100);
 					
-					if ( $value >= 255)
+					if ($value >= 255)
 					{
 						$value = 255;
 					}
