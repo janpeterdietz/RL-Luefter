@@ -224,7 +224,7 @@ declare(strict_types=1);
             }
         }
 
-		private function SendData(string $Payload)
+		public function SendData(string $Payload)
 		{
 			if ($this->HasActiveParent()) 
 			{
@@ -395,6 +395,7 @@ declare(strict_types=1);
 				case 0xB7: // Operating_mode
 					$mode = hexdec( bin2hex($data[$position +1]) ); 
 					$this->SetValue('Operatingmode', $mode);
+					IPS_LogMessage("Lüfter Auslesen ", "Operating_mode: $mode ");
 					$position = $position +2;
 				break;
 
@@ -433,7 +434,7 @@ declare(strict_types=1);
 				break; 
 				
 				case "Powermode": 			
-					if (($value < 1) or (($value > 3) and ($value != 255)) )
+					if (($value < 1) or ($value > 3) or ($value != 255))
 					{
 						IPS_LogMessage("Lüfter Powermode Setzen ", "Falscher Wert $value");
 						$value = 0xff;
