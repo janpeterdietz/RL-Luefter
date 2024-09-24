@@ -59,7 +59,8 @@ Speed         |    Integer    | 0 bis 255
 Operatingmode |    Integer    | 1 = Zuluft, 2 = Wärmetauscher, 3 = Abluft
 
 
-Name                        | Typ           | Beschreibung
+Name                        | Typ           
+--------------------------- | ------------- 
 Luftfeuchte                 |    Integer    
 Filterreinigung notwendig   |    Bool
 Zeit bis Filterreinigung    |    String
