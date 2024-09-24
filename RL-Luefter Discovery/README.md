@@ -13,7 +13,7 @@ Beschreibung des Moduls.
 
 ### 1. Funktionsumfang
 
-*
+Scant im WLAN nach RL-Lüftern und ermöglicht ein Konfiguration der gefunden Lüfter
 
 ### 2. Voraussetzungen
 
@@ -32,18 +32,7 @@ https://github.com/janpeterdietz/RL-Luefter
 
 __Konfigurationsseite__:
 
-Name              | Beschreibung
------------------ | ------------------
-Update Interval       | Wert in Sekunden zur Zyklischen Abfrage der Lüfterdaten
-Lüfter Identifktion   | Lüfter ID als String
 
-Es wird immmer das Standardpasswort verwendet „1111“.
-
-Es wird aufgefort einen UPD Soket zu Konfiguiren
-Sende Host: IP-des Lüfters
-Sende Port: z.B. auf 4000
-Empf. Host: IP des Symcon Systems
-Empf Port: z.B. auf 5000 (bis immer mit verschiendenen Ports pro Lüfter Konfiguration getestet)
 
 ### 5. Statusvariablen und Profile
 
@@ -51,42 +40,12 @@ Die Statusvariablen/Kategorien werden automatisch angelegt. Das Löschen einzeln
 
 #### Statusvariablen
 
-Name   | Typ     | Beschreibung
------- | ------- | ------------
-       |         |
-       |         |
-
 #### Profile
 
-Name   | Typ
------- | -------
-       |
-       |
 
 ### 6. Visualisierung
 
-Die Funktionalität, die das Modul in der Visualisierung bietet.
 
 ### 7. PHP-Befehlsreferenz
-
-über 
-RequestAction(int $id, $value) könnne die Werte 
-       State
-       Powermode
-       Speed
-und    Operatingmode einzeln gesetzt werden.
-
-RL_SetValueEx(int $id, array)
-erlaubt ein setzen von meheren Werten gleichzeitig.
-Es müssen nicht alle gestzet werden.
-Beispiel:
-
-$new_para['State'] = true; // Lüfter Ein
-$new_para['Operatingmode'] = 1; // Wärmerückgewinnung 
-$new_para['Powermode'] = 0xff; // Manuel Lüftergeschwindigkeit
-$new_para['Speed'] = 10 ; // Lüfter Speed
-RL_SetValueEx($id_Lufter_instanz, $new_para);
-
-
 
 			
