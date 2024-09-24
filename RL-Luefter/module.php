@@ -145,8 +145,6 @@ declare(strict_types=1);
 			if (array_key_exists('Speed', $data[$key]))
 			{
 				$this->SetValue('Speed', $data[$key]['Speed']);
-
-				IPS_LogMessage("RL_Lüfter", "Speed ". $data[$key]['Speed']);
 			}
 			if (array_key_exists('RTC_Batterie_Voltage', $data[$key]))
 			{
