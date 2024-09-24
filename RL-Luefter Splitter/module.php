@@ -237,7 +237,6 @@ declare(strict_types=1);
 
 					}
 
-
 					$position = $position + 3;
 				break;
 
