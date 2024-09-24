@@ -13,8 +13,8 @@ Beschreibung des Moduls.
 
 ### 1. Funktionsumfang
 
-Das Modul dienst zru Steuerung des RL-Lüfter. 
-Die Lüfetr werden auch unter Label OXXIFY vertrieben, getestet wurde das Modul bisher nur mit 2 TwinFresh Expert Duo RW-30 V.2.
+Das Modul dienst zur Steuerung von RL-Lüftern. 
+Die Lüfter werden auch unter Label OXXIFY vertrieben, getestet wurde das Modul bisher nur mit 2 TwinFresh Expert Duo RW-30 V.2.
 
 
 
@@ -62,11 +62,11 @@ Name          | Typ           | Beschreibung
 ------------- | ------------- | ------------
 State         |    Bolean     | Lüfter Status (Ein / Aus)
 Powermode     |    Integer    | Stufe 1 bis Stufe 3, Manuel (255) 
-Speed         |    Integer    | 0 bis 255
-Operatingmode |    Integer    | 1 = Zuluft, 2 = Wärmetauscher, 3 = Abluft
+Speed         |    Integer    | 0 bis 100% (Abzeige nur wenn Powermode = Manuel
+Operatingmode |    Integer    | 0 = Abluft, 1 = Wärmerückgewinnung, 2 = Zuluft
 
 
-Werte und Anzeiegevariablen (nur lesend)
+Ausgelesende Werte und Anzeiegevariablen (nur lesend)
 
 Name                        | Typ           
 --------------------------- | ------------- 
@@ -91,16 +91,12 @@ Name                | Typ
 
 ### 7. PHP-Befehlsreferenz
 
-über 
-RequestAction(int $id, $value) können die Werte 
-       State
-       Powermode
-       Speed
-und    Operatingmode einzeln gesetzt werden.
+Über RequestAction(int $id, $value) können die Werte 
+       State, Powermode, Speed und Operatingmode einzeln gesetzt werden.
 
 RL_SetValueEx(int $id, array)
 erlaubt ein setzen von meheren Werten gleichzeitig.
-Es müssen nicht alle gestzet werden.
+Es müssen nicht alle Werte gestzet werden.
 Beispiel:
 $new_para['State'] = true; // Lüfter Ein
 $new_para['Operatingmode'] = 1; // Wärmerückgewinnung 
