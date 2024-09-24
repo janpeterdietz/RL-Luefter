@@ -54,7 +54,7 @@ Die Statusvariablen/Kategorien werden automatisch angelegt. Das Löschen einzeln
 Name          | Typ           | Beschreibung
 ------------- | ------------- | ------------
 State         |    Bolean     | Lüfter Status (Ein / Aus)
-Powermode     |    Integer    | Stufe 1 bis Stufe 3, Manuel (255)
+Powermode     |    Integer    | Stufe 1 bis Stufe 3, Manuel (255) 
 Speed         |    Integer    | 0 bis 255
 Operatingmode |    Integer    | 1 = Zuluft, 2 = Wärmetauscher, 3 = Abluft
 
@@ -70,14 +70,15 @@ RTC Batteriespannugg        |    Integer
 
 #### Profile
 
-Name   | Typ
------- | -------
-       |
-       |
+Name                | Typ
+------------------- | -------
+  RLV.Powermode     | Integer => für Powermode
+  RLV.Operatingmode | Integer => für Operationg Mode
+  RLV.AlertLevel    | Integer => für Systemwarnung
+  
 
 ### 6. Visualisierung
 
-Die Funktionalität, die das Modul in der Visualisierung bietet.
 
 ### 7. PHP-Befehlsreferenz
 
