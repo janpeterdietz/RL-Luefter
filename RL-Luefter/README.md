@@ -51,10 +51,21 @@ Die Statusvariablen/Kategorien werden automatisch angelegt. Das Löschen einzeln
 
 #### Statusvariablen
 
-Name   | Typ     | Beschreibung
------- | ------- | ------------
-       |         |
-       |         |
+Name          | Typ           | Beschreibung
+------------- | ------------- | ------------
+State         |    Bolean     | Lüfter Status (Ein / Aus)
+Powermode     |    Integer    | Stufe 1 bis Stufe 3, Manuel (255)
+Speed         |    Integer    | 0 bis 255
+Operatingmode |    Integer    | 1 = Zuluft, 2 = Wärmetauscher, 3 = Abluft
+
+
+Name                        | Typ           | Beschreibung
+Luftfeuchte                 |    Integer    
+Filterreinigung notwendig   |    Bool
+Zeit bis Filterreinigung    |    String
+Systemwarnung               |    Integer
+RTC Batteriespannugg        |    Integer
+
 
 #### Profile
 
@@ -70,7 +81,7 @@ Die Funktionalität, die das Modul in der Visualisierung bietet.
 ### 7. PHP-Befehlsreferenz
 
 über 
-RequestAction(int $id, $value) könnne die Werte 
+RequestAction(int $id, $value) können die Werte 
        State
        Powermode
        Speed
@@ -80,13 +91,13 @@ RL_SetValueEx(int $id, array)
 erlaubt ein setzen von meheren Werten gleichzeitig.
 Es müssen nicht alle gestzet werden.
 Beispiel:
-
 $new_para['State'] = true; // Lüfter Ein
 $new_para['Operatingmode'] = 1; // Wärmerückgewinnung 
 $new_para['Powermode'] = 0xff; // Manuel Lüftergeschwindigkeit
 $new_para['Speed'] = 10 ; // Lüfter Speed
 RL_SetValueEx($id_Lufter_instanz, $new_para);
 
+RL_RequestStatus(int $id) => erlaubt das abfragen der oben genannten Variablen.
 
-
+RL_ResetFilterClean(int $id) => Rücksetzen des Filtereinigungsstatus 
 			
