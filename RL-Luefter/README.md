@@ -13,7 +13,10 @@ Beschreibung des Moduls.
 
 ### 1. Funktionsumfang
 
-*
+Das Modul dienst zru Steuerung des RL-Lüfter. 
+Die Lüfetr werden auch unter Label OXXIFY vertrieben, getestet wurde das Modul bisher nur mit 2 TwinFresh Expert Duo RW-30 V.2.
+
+
 
 ### 2. Voraussetzungen
 
@@ -27,29 +30,34 @@ https://github.com/janpeterdietz/RL-Luefter
 
 ### 4. Einrichten der Instanzen in IP-Symcon
 
- Unter 'Instanz hinzufügen' kann das 'RL_Luefter'-Modul mithilfe des Schnellfilters gefunden werden.  
+Die Lüfter können über die Discovery Instanz automatisch im WLAN gefunden werden.
+In diesem Fall wird die Lüfter Indentifikation und IP-Adresse ausgelsen und konfiguiert.
+
+Alternativ Unter 'Instanz hinzufügen' kann das 'RL_Luefter'-Modul mithilfe des Schnellfilters gefunden werden.  
 	- Weitere Informationen zum Hinzufügen von Instanzen in der [Dokumentation der Instanzen](https://www.symcon.de/service/dokumentation/konzepte/instanzen/#Instanz_hinzufügen)
 
 __Konfigurationsseite__:
 
-Name              | Beschreibung
------------------ | ------------------
-Update Interval       | Wert in Sekunden zur Zyklischen Abfrage der Lüfterdaten
-Lüfter Identifktion   | Lüfter ID als String
+Name                    | Beschreibung
+----------------------- | ------------------
+Update Interval         | Wert in Sekunden zur Zyklischen Abfrage der Lüfterdaten
+Lüfter Identifikation   | Lüfter ID als String
+IP-Adresse              | IP Adresse des Lüfters
 
-Es wird immmer das Standardpasswort verwendet „1111“.
 
-Es wird aufgefort einen UPD Soket zu Konfiguiren
-Sende Host: IP-des Lüfters
-Sende Port: z.B. auf 4000
-Empf. Host: IP des Symcon Systems
-Empf Port: z.B. auf 5000 (bis immer mit verschiendenen Ports pro Lüfter Konfiguration getestet)
+Es wird immmer das Standardpasswort verwendet „1111“. (nicht konfigierbar)
+
+Die Lüfter können über die Discovery Instanz automatisch im WLAN gefunden werden.
+In diesem Fall wird die Lüfter Indentifikation und IP-Adresse ausgelsen und konfiguiert.
+
 
 ### 5. Statusvariablen und Profile
 
 Die Statusvariablen/Kategorien werden automatisch angelegt. Das Löschen einzelner kann zu Fehlfunktionen führen.
 
 #### Statusvariablen
+
+Funktionsvariablen (lesend und schreibend)
 
 Name          | Typ           | Beschreibung
 ------------- | ------------- | ------------
@@ -58,6 +66,8 @@ Powermode     |    Integer    | Stufe 1 bis Stufe 3, Manuel (255)
 Speed         |    Integer    | 0 bis 255
 Operatingmode |    Integer    | 1 = Zuluft, 2 = Wärmetauscher, 3 = Abluft
 
+
+Werte und Anzeiegevariablen (nur lesend)
 
 Name                        | Typ           
 --------------------------- | ------------- 
