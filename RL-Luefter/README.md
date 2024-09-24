@@ -47,9 +47,8 @@ IP-Adresse              | IP Adresse des Lüfters
 
 Es wird immmer das Standardpasswort verwendet „1111“. (nicht konfigierbar)
 
-Die Lüfter können über die Discovery Instanz automatisch im WLAN gefunden werden.
-In diesem Fall wird die Lüfter Indentifikation und IP-Adresse ausgelsen und konfiguiert.
-
+Das Anlegen einer Lüfter Instanz oder Discovery Instant öffent einen UDP Port auf Port 5000.
+Der Port kann derzeit nicht geändert werden.
 
 ### 5. Statusvariablen und Profile
 
