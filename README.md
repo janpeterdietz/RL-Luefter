@@ -1,6 +1,6 @@
 # RL_Luefter
 
-Folgende Module beinhaltet das RL_Luefter Repository:
+Folgende Module beinhaltet das RL-Luefter Repository:
 
-- __RL_Luefter__ ([Dokumentation](RL_Luefter))  
+- __RL-Luefter__ ([Dokumentation](RL-Luefter))  
 	Kurze Beschreibung des Moduls.
