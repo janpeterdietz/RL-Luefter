@@ -49,7 +49,7 @@ declare(strict_types=1);
 		public function ForwardData($JSONString)
 		{
 			$data = json_decode($JSONString);
-			//IPS_LogMessage('Splitter FRWD', utf8_decode($data->Buffer . ' - ' . $data->ClientIP . ' - ' . $data->ClientPort));
+			//$this->LogMessage('Splitter FRWD', utf8_decode($data->Buffer . ' - ' . $data->ClientIP . ' - ' . $data->ClientPort));
 
 			$payload = utf8_decode($data->Buffer);
 			$checksum = $this->calc_checksumm( $payload);
@@ -73,7 +73,7 @@ declare(strict_types=1);
 		public function ReceiveData($JSONString)
 		{
 			$data = json_decode($JSONString);
-			//IPS_LogMessage('Device RECV', $data->Buffer . ' - ' . $data->ClientIP . ' - ' . $data->ClientPort);
+			//$this->LogMessage('Device RECV', $data->Buffer . ' - ' . $data->ClientIP . ' - ' . $data->ClientPort);
 			$ip = $data->ClientIP;
 			
 			$data = utf8_decode($data->Buffer) ;
@@ -89,7 +89,7 @@ declare(strict_types=1);
 				$PW = substr($data, $position + 1, $PW_len);  
 				if ( strcmp($PW, $password) != 0 )
 				{
-					IPS_LogMessage("Lüfter Auslesen ", "PW Länge $PW_len Passwort falsch $PW");
+					$this->LogMessage(__FUNCTION__, "PW Länge $PW_len Passwort falsch $PW");
 					//return;
 				}
 			}
@@ -107,17 +107,17 @@ declare(strict_types=1);
 					$i = $this->read_paremter( $data, $i , $devices);
 					if  ( $i === false) 
 					{
-						IPS_LogMessage("Lüfter Auslesen ", "Anzahl Paramter Fehler");
+						$this->LogMessage(__FUNCTION__, "Anzahl Paramter Fehler");
 						return;    
 					};      
 				}
 			}
 			else
 			{
-				IPS_LogMessage("Lüfter Auslesen ", "func ungleich 6: $func");
+				$this->LogMessage(__FUNCTION__, "func ungleich 6: $func");
 			}
 
-			//IPS_LogMessage('Splitter Receive', json_encode($devices));
+			//$this->LogMessage('Splitter Receive', json_encode($devices));
 
 			if ($PW_len == 0)
 			{
@@ -248,12 +248,12 @@ declare(strict_types=1);
 
 				case 0xFE: // Spezial Befehl (Nächster Befehler hat Überlänge)
 					$position = $position + 2;
-					//IPS_LogMessage("Lüfter Auslesen ", "Spezialbefehl: $Parameter_Id");
+					//$this->LogMessage(__FUNCTION__, "Spezialbefehl: $Parameter_Id");
 					break;
 
 				//$Parameter_Id = hexdec($Parameter_Id);
 				default: // ???
-					IPS_LogMessage("Lüfter Auslesen ", "Parameter nicht bekannt: $Parameter_Id Position: $position");
+					$this->LogMessage(__FUNCTION__, "Parameter nicht bekannt: $Parameter_Id Position: $position");
 					return false;
 				break;       
 			}			

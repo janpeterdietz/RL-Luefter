@@ -15,7 +15,7 @@ declare(strict_types=1);
 			{
 				IPS_CreateVariableProfile('RLV.Powermode', VARIABLETYPE_INTEGER);
 				IPS_SetVariableProfileText('RLV.Powermode', '', '');
-				IPS_SetVariableProfileValues ('RLV.Powermode', 1, 255, );
+				IPS_SetVariableProfileValues ('RLV.Powermode', 1, 255, 0);
 				IPS_SetVariableProfileAssociation('RLV.Powermode', 0x01, $this->Translate("Level 1"),"" , -1);
 				IPS_SetVariableProfileAssociation('RLV.Powermode', 0x02, $this->Translate("Level 2"),"" , -1);
 				IPS_SetVariableProfileAssociation('RLV.Powermode', 0x03, $this->Translate("Level 3"),"" , -1);
@@ -26,7 +26,7 @@ declare(strict_types=1);
 			{
 				IPS_CreateVariableProfile('RLV.Operatingmode', VARIABLETYPE_INTEGER);
 				IPS_SetVariableProfileText('RLV.Operatingmode', '', '');
-				IPS_SetVariableProfileValues ('RLV.Operatingmode', 0, 2, );
+				IPS_SetVariableProfileValues ('RLV.Operatingmode', 0, 2, 0);
 				IPS_SetVariableProfileAssociation('RLV.Operatingmode', 0x00, $this->Translate("Exhaust air"),"" , -1);
 				IPS_SetVariableProfileAssociation('RLV.Operatingmode', 0x01, $this->Translate("Heat recovery"),"" , -1);
 				IPS_SetVariableProfileAssociation('RLV.Operatingmode', 0x02, $this->Translate("supply air"),"" , -1);
@@ -304,8 +304,6 @@ declare(strict_types=1);
 
 		private function translate_paramter( string $ident, int $value)
 		{
-    		//IPS_LogMessage("Lüfter Parameter Setzen ", "Name: $ident Wert: $value");
-
 			switch ($ident)
 			{
 				case "State": 
@@ -324,7 +322,7 @@ declare(strict_types=1);
 				case "Powermode": 			
 					if (($value < 1) or (($value > 3) and ($value != 255)))
 					{
-						IPS_LogMessage("Lüfter Powermode Setzen ", "Falscher Wert $value");
+						$this->LogMessage(__FUNCTION__, "Powrmode setzen,  Falscher Wert $value");
 						$value = 0xff;
 					}
 					$para = hex2bin('02');
@@ -348,7 +346,7 @@ declare(strict_types=1);
 				case "Operatingmode": 				
 					if (($value < 0) or ($value > 2))
 					{
-						IPS_LogMessage("Lüfter Operatingmode Setzen ", "Falsher Wert $value");
+						$this->LogMessage(__FUNCTION__, "Lüfter Operatingmode Setzen . Falsher Wert $value");
 						$value = 1;
 					}
 					$para = hex2bin('B7');
@@ -356,7 +354,7 @@ declare(strict_types=1);
 				break;   
 
 				default:
-					IPS_LogMessage("Lüfter Parameter Setzen ", "Variable nicht veränderbar");
+				$this->LogMessage(__FUNCTION__, "Lüfter Parameter Setzen . Variable nicht veränderbar");
 				break;
 			}
 

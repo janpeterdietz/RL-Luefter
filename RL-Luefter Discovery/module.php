@@ -38,10 +38,10 @@ declare(strict_types=1);
 
 		public function ReceiveData($JSONString)
 		{
-			//IPS_LogMessage('RL  Discovery ReceiveData', $JSONString);
+			//$this->LogMessage('RL  Discovery ReceiveData', $JSONString);
 	
 			$data = json_decode($JSONString, true); // neune Geräte
-			//IPS_LogMessage('RL  Discovery ReceiveData', print_r($data, true));
+			//$this->LogMessage('RL  Discovery ReceiveData', print_r($data, true));
 			
 			$newdevice = json_decode($data['Buffer'], true);
         
@@ -49,13 +49,13 @@ declare(strict_types=1);
 			$devices += $newdevice;
             $this->SetBuffer('Devices', json_encode($devices));
 
-			//IPS_LogMessage('RL  Discovery ReceiveData', json_encode($devices) );
+			//$this->LogMessage('RL  Discovery ReceiveData', json_encode($devices) );
 	
 		}
 
 		private function SendData(string $Payload)
 		{
-			//IPS_LogMessage('RL  Discovery Senddata', $Payload );
+			//$this->LogMessage('RL  Discovery Senddata', $Payload );
 			
 			if ($this->HasActiveParent()) 
 			{
@@ -140,7 +140,6 @@ declare(strict_types=1);
 			$count = 0;
 			foreach (IPS_GetInstanceListByModuleID('{73E78C43-F612-1FED-F3FD-23B8999F504D}') as $instanceID)
 			{
-				//IPS_LogMessage('Govee Configurator', $instanceID);
 				
 				$instance_match = false;
 				foreach($availableDevices as  $key => $device)
