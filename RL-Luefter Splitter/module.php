@@ -25,7 +25,7 @@ declare(strict_types=1);
 			parent::ApplyChanges();
 
 			$config = json_decode( $this->GetConfigurationForParent(), true); // UDP Port konfigurieren
-			$this->SetSummary($config['BindIP'] .":". $config['BindPort']);
+			$this->SetSummary('UDP Config: ' . $config['BindIP'] .":". $config['BindPort']);
 		}
 
 		public function GetConfigurationForParent() //Set UBD Port
