@@ -322,7 +322,7 @@ declare(strict_types=1);
 				case "Powermode": 			
 					if (($value < 1) or (($value > 3) and ($value != 255)))
 					{
-						$this->LogMessage(__FUNCTION__, "Powrmode setzen,  Falscher Wert $value");
+						$this->LogMessage("Powrmode setzen,  Falscher Wert $value", KL_NOTIFY);
 						$value = 0xff;
 					}
 					$para = hex2bin('02');
@@ -346,7 +346,7 @@ declare(strict_types=1);
 				case "Operatingmode": 				
 					if (($value < 0) or ($value > 2))
 					{
-						$this->LogMessage(__FUNCTION__, "Lüfter Operatingmode Setzen . Falsher Wert $value");
+						$this->LogMessage("Lüfter Operatingmode Setzen . Falsher Wert $value", KL_NOTIFY);
 						$value = 1;
 					}
 					$para = hex2bin('B7');
@@ -354,7 +354,7 @@ declare(strict_types=1);
 				break;   
 
 				default:
-				$this->LogMessage(__FUNCTION__, "Lüfter Parameter Setzen . Variable nicht veränderbar");
+				$this->LogMessage("Lüfter Parameter Setzen . Variable nicht veränderbar", KL_NOTIFY);
 				break;
 			}
 

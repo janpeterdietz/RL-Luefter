@@ -38,25 +38,18 @@ declare(strict_types=1);
 
 		public function ReceiveData($JSONString)
 		{
-			//$this->LogMessage('RL  Discovery ReceiveData', $JSONString);
 	
 			$data = json_decode($JSONString, true); // neune Geräte
-			//$this->LogMessage('RL  Discovery ReceiveData', print_r($data, true));
 			
 			$newdevice = json_decode($data['Buffer'], true);
         
             $devices = json_decode($this->GetBuffer('Devices'), true); // lese vorhandene Geräte
 			$devices += $newdevice;
-            $this->SetBuffer('Devices', json_encode($devices));
-
-			//$this->LogMessage('RL  Discovery ReceiveData', json_encode($devices) );
-	
+            $this->SetBuffer('Devices', json_encode($devices));	
 		}
 
 		private function SendData(string $Payload)
 		{
-			//$this->LogMessage('RL  Discovery Senddata', $Payload );
-			
 			if ($this->HasActiveParent()) 
 			{
 				$this->SendDataToParent(json_encode([

@@ -24,10 +24,7 @@ declare(strict_types=1);
 			//Never delete this line!
 			parent::ApplyChanges();
 
-			$this->GetConfigurationForParent(); // UDP Port konfigurieren
-
-			// SetSummary setzen
-			$config = json_decode( IPS_GetConfiguration(IPS_GetInstance($this->InstanceID)['ConnectionID']), true);
+			$config = json_decode( $this->GetConfigurationForParent(), true); // UDP Port konfigurieren
 			$this->SetSummary($config['BindIP'] .":". $config['BindPort']);
 		}
 
@@ -49,8 +46,6 @@ declare(strict_types=1);
 		public function ForwardData($JSONString)
 		{
 			$data = json_decode($JSONString);
-			//$this->LogMessage('Splitter FRWD', utf8_decode($data->Buffer . ' - ' . $data->ClientIP . ' - ' . $data->ClientPort));
-
 			$payload = utf8_decode($data->Buffer);
 			$checksum = $this->calc_checksumm( $payload);
 			$payload = $payload . $checksum;
@@ -73,7 +68,6 @@ declare(strict_types=1);
 		public function ReceiveData($JSONString)
 		{
 			$data = json_decode($JSONString);
-			//$this->LogMessage('Device RECV', $data->Buffer . ' - ' . $data->ClientIP . ' - ' . $data->ClientPort);
 			$ip = $data->ClientIP;
 			
 			$data = utf8_decode($data->Buffer) ;
@@ -89,7 +83,7 @@ declare(strict_types=1);
 				$PW = substr($data, $position + 1, $PW_len);  
 				if ( strcmp($PW, $password) != 0 )
 				{
-					$this->LogMessage(__FUNCTION__, "PW Länge $PW_len Passwort falsch $PW");
+					$this->LogMessage("PW Länge $PW_len Passwort falsch $PW", KL_NOTIFY);
 					//return;
 				}
 			}
@@ -107,17 +101,15 @@ declare(strict_types=1);
 					$i = $this->read_paremter( $data, $i , $devices);
 					if  ( $i === false) 
 					{
-						$this->LogMessage(__FUNCTION__, "Anzahl Paramter Fehler");
+						$this->LogMessage("Anzahl Paramter Fehler", KL_NOTIFY);
 						return;    
 					};      
 				}
 			}
 			else
 			{
-				$this->LogMessage(__FUNCTION__, "func ungleich 6: $func");
+				$this->LogMessage( "func ungleich 6: $func", KL_NOTIFY);
 			}
-
-			//$this->LogMessage('Splitter Receive', json_encode($devices));
 
 			if ($PW_len == 0)
 			{
@@ -248,12 +240,11 @@ declare(strict_types=1);
 
 				case 0xFE: // Spezial Befehl (Nächster Befehler hat Überlänge)
 					$position = $position + 2;
-					//$this->LogMessage(__FUNCTION__, "Spezialbefehl: $Parameter_Id");
 					break;
 
 				//$Parameter_Id = hexdec($Parameter_Id);
 				default: // ???
-					$this->LogMessage(__FUNCTION__, "Parameter nicht bekannt: $Parameter_Id Position: $position");
+					$this->LogMessage("Parameter nicht bekannt: $Parameter_Id Position: $position", KL_NOTIFY);
 					return false;
 				break;       
 			}			
