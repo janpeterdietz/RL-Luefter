@@ -2,35 +2,38 @@
     "translations": {
         "de": {
             "Active": "Aktiv",
-            "Vent_ident": "Lüfter Identfikation",
+            "Update Interval" :  "Abfrageinterval",
+            "Ventilator Type": "Lüfter Type",
+            "Ventilator Identification": "Lüfter Identfikation",
+			"IP address": "IP Adresse",
 
-            "State": "Status",
+           
             "Powermode": "Leistungsstufe",
-
-            "Speed":"Lüftergeschwindigkeit",
             "Level 1": "Stufe 1",
             "Level 2": "Stufe 2",
             "Level 3": "Stufe 3",
             "Manuel": "Manuel",
-            
+
+            "Systemwarning": "Systemmeldung",
+            "OK": "OK",
+            "Warning": "Warnung",
+            "Alarm": "Alarm",
+
+
             "Operatingmode": "Betriebsart",
             "Exhaust air": "Abluft",
             "Heat recovery": "Wärmerückgewinnung",
             "supply air": "Zuluft",
 
+            "State": "Status",
+            "Speed": "Lüftergeschwindigkeit",
             "Humidity": "Luftfeuchtigkeit",
 
             "Filter cleaning": "Filter Reinigung",
             "Time until filter cleaning": "Zeit bis Filterreinigung",
-            "Systemwarning": "Systemmeldung",
-            "OK": "OK",
-            "Warning": "Warnung",
-            "Alarm": "Alarm",
+     
         
-            "RTC Batterie Voltage": "RTC Batterie Spannung",
-
-            "Update Interval": "Update Interval",
-          
+            "RTC Batterie Voltage": "RTC Batterie Spannung",          
             "seconds": "Sekunden"
         }
     }

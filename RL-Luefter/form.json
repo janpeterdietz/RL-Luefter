@@ -3,7 +3,7 @@
         {"type": "CheckBox", "name": "Active","caption": "Active"},
         {"type": "NumberSpinner", "name": "UpdateInterval", "caption": "Update Interval", "suffix": "seconds", "minimum":60 },
         {"type": "ValidationTextBox", "name": "Vent_Type","caption": "Ventilator Type"},
-        {"type": "ValidationTextBox", "name": "Vent_ident","caption": "Vent_ident"},
+        {"type": "ValidationTextBox", "name": "Vent_ident","caption": "Ventilator Identification"},
         {"type": "ValidationTextBox", "name": "IPAddress", "caption": "IP address"}
         
 ],
