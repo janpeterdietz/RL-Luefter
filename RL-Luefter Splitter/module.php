@@ -218,6 +218,12 @@ declare(strict_types=1);
 					$position = $position + 2;
 				break;
 
+				case 0xB7: // Operating_mode
+					$mode = hexdec( bin2hex($data[$position +1]) ); 
+					$devices[$id_luefter] += ['Operatingmode'=> $mode];
+					$position = $position +2;
+				break;
+
 				case 0xB9: // Anlagentyp
 					$AnlageTyp = hexdec( bin2hex($data[$position +1]));
 					switch ($AnlageTyp)
@@ -239,11 +245,7 @@ declare(strict_types=1);
 					$position = $position + 3;
 				break;
 
-				case 0xB7: // Operating_mode
-					$mode = hexdec( bin2hex($data[$position +1]) ); 
-					$devices[$id_luefter] += ['Operatingmode'=> $mode];
-					$position = $position +2;
-				break;
+
 
 				case 0xFE: // Spezial Befehl (Nächster Befehl hat evtl. Überlänge)
 				
@@ -252,9 +254,19 @@ declare(strict_types=1);
 
 					switch ($parameter)
 					{
-						case 0x24: // Batterie Spannug
+						case 0x24: // Batterie Spannung
+							$position = $position + 2;
+						break;
+						
 						case 0x64: // Zeit bis Filterwechsel
+							$devices[$id_luefter] += ['time_to_filter_cleaning'=> (hexdec( bin2hex($data[$position +5]) ) . " Tage " . hexdec( bin2hex($data[$position + 4]) ) . " Stunden " . hexdec( bin2hex($data[$position +3]) ) . " Minuten" ) ];
+							$position = $position + $parameterlen + 3;	
+						break;
+
 						case 0x7c: // Ventilator ID
+							$position = $position + 2;
+						break;
+
 						case 0xb9: // Anlagentyp
 							$position = $position + 2;
 						break;
