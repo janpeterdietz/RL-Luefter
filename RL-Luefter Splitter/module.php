@@ -255,7 +255,7 @@ declare(strict_types=1);
 					switch ($parameter)
 					{
 						case 0x24: // Batterie Spannung
-							$position = $position + 2;
+							$position +=  2;
 						break;
 						
 						case 0x64: // Zeit bis Filterwechsel
