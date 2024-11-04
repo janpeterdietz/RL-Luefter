@@ -157,6 +157,14 @@ declare(strict_types=1);
 					$devices[$id_luefter] += ['Powermode'=> $Leistungsstufe];
 					$position = $position +2;
 				break; 
+
+				case 0x06: // Boostmode (keine Anzeige)
+					$position = $position +2;
+				break; 
+				
+				case 0x07: // Timmerbetieb (keine Anzeige)
+					$position = $position +2;
+				break; 
 			
 				case 0x44: // Geschwindigkeit
 					$Speed = hexdec( bin2hex($data[$position +1]) )  ; 
@@ -228,7 +236,6 @@ declare(strict_types=1);
 						break;
 
 					}
-
 					$position = $position + 3;
 				break;
 
@@ -238,15 +245,27 @@ declare(strict_types=1);
 					$position = $position +2;
 				break;
 
-				case 0xFE: // Spezial Befehl (Nächster Befehler hat Überlänge)
-					//$position = $position + 2;
+				case 0xFE: // Spezial Befehl (Nächster Befehl hat evtl. Überlänge)
+				
 					$parameterlen = hexdec( bin2hex($data[$position +1]) );
-					$parameter = ( bin2hex($data[$position +2]) );
+					$parameter = hexdec( bin2hex($data[$position +2]) ) ;
+
+					switch ($parameter)
+					{
+						case 0x24: // Batterie Spannug
+						case 0x64: // Zeit bis Filterwechsel
+						case 0x7c: // Ventilator ID
+						case 0xb9: // Anlagentyp
+							$position = $position + 2;
+						break;
+
+						default:
+							$this->LogMessage("Spezialbefehl 0xFF: Position: $position, parameterlen: $parameterlen  parameter: 0x" . sprintf('%x', $parameter ), KL_NOTIFY);
+							$position = $position + $parameterlen + 3;	
+						break;			
+					}
 
 					//$this->LogMessage("Spezialbefehl: Position: $position, parameterlen: $parameterlen  parameter: 0x$parameter", KL_NOTIFY);
-				
-					$position = $position + $parameterlen + 3;
-
 					break;
 
 				//$Parameter_Id = hexdec($Parameter_Id);
