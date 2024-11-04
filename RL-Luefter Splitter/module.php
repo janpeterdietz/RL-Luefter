@@ -224,7 +224,7 @@ declare(strict_types=1);
 							$devices[$id_luefter] += ['Vent_Type'=> "TwinFresh Expert RW-30 V.2"];
 						break;
 						default:
-							$devices[$id_luefter] += ['Vent_Type'=> "unbekannt"];
+							$devices[$id_luefter] += ['Vent_Type'=> "unbekannt ($AnlageTyp)"];
 						break;
 
 					}
@@ -239,7 +239,14 @@ declare(strict_types=1);
 				break;
 
 				case 0xFE: // Spezial Befehl (Nächster Befehler hat Überlänge)
-					$position = $position + 2;
+					//$position = $position + 2;
+					$parameterlen = hexdec( bin2hex($data[$position +1]) );
+					$parameter = ( bin2hex($data[$position +2]) );
+
+					//$this->LogMessage("Spezialbefehl: Position: $position, parameterlen: $parameterlen  parameter: 0x$parameter", KL_NOTIFY);
+				
+					$position = $position + $parameterlen + 3;
+
 					break;
 
 				//$Parameter_Id = hexdec($Parameter_Id);
