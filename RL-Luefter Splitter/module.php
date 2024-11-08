@@ -149,13 +149,13 @@ declare(strict_types=1);
 					}
 
 					$devices[$id_luefter] += ['State'=> $Status];
-					$position = $position +2;
+					$position += 2;
 				break;   
 
 				case 0x02: // Leistungsstufe
 					$Leistungsstufe = hexdec( bin2hex($data[$position +1]) ); 
 					$devices[$id_luefter] += ['Powermode'=> $Leistungsstufe];
-					$position = $position +2;
+					$position += 2;
 				break; 
 
 				case 0x06: // Boostmode (keine Anzeige)
