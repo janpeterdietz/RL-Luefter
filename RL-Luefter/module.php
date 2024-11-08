@@ -322,7 +322,7 @@ declare(strict_types=1);
 				case "Powermode": 			
 					if (($value < 1) or (($value > 3) and ($value != 255)))
 					{
-						$this->LogMessage("Powrmode setzen,  Falscher Wert $value", KL_NOTIFY);
+						$this->LogMessage("Powermode setzen,  Falscher Wert $value", KL_NOTIFY);
 						$value = 0xff;
 					}
 					$para = hex2bin('02');

@@ -228,17 +228,21 @@ declare(strict_types=1);
 					$AnlageTyp = hexdec( bin2hex($data[$position +1]));
 					switch ($AnlageTyp)
 					{
-						case 3:
+						case 0x03:
 							$devices[$id_luefter] += ['Vent_Type'=> "TwinFresh Expert RX1-xxx V.2"];
 						break;
-						case 4:
+						case 0x04:
 							$devices[$id_luefter] += ['Vent_Type'=> "TwinFresh Expert Duo RW-30 V.2"];
 						break;
-						case 5:
+						case 0x05:
 							$devices[$id_luefter] += ['Vent_Type'=> "TwinFresh Expert RW-30 V.2"];
 						break;
+						case 0x0E:
+							$devices[$id_luefter] += ['Vent_Type'=> "Oxxify.smart 50“"];
+						break;
+
 						default:
-							$devices[$id_luefter] += ['Vent_Type'=> "unbekannt ($AnlageTyp)"];
+							$devices[$id_luefter] += ['Vent_Type'=> "unbekannt (0x" . sprintf('%x', $AnlageTyp )];
 						break;
 
 					}
@@ -261,6 +265,7 @@ declare(strict_types=1);
 						case 0x64: // Zeit bis Filterwechsel
 							$devices[$id_luefter] += ['time_to_filter_cleaning'=> (hexdec( bin2hex($data[$position +5]) ) . " Tage " . hexdec( bin2hex($data[$position + 4]) ) . " Stunden " . hexdec( bin2hex($data[$position +3]) ) . " Minuten" ) ];
 							$position = $position + $parameterlen + 3;	
+							//$this->LogMessage("Spezialbefehl: Position: $position, parameterlen: $parameterlen  parameter: 0x" . sprintf('%x', $parameter ) , KL_NOTIFY);
 						break;
 
 						case 0x7c: // Ventilator ID
@@ -277,7 +282,7 @@ declare(strict_types=1);
 						break;			
 					}
 
-					//$this->LogMessage("Spezialbefehl: Position: $position, parameterlen: $parameterlen  parameter: 0x$parameter", KL_NOTIFY);
+					//$this->LogMessage("Spezialbefehl 0xFF: Position: $position, parameterlen: $parameterlen  parameter: 0x" . sprintf('%x', $parameter ), KL_NOTIFY);
 					break;
 
 				//$Parameter_Id = hexdec($Parameter_Id);

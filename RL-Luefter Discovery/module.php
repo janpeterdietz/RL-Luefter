@@ -33,7 +33,7 @@ declare(strict_types=1);
 			parent::ApplyChanges();
 
 		    $this->ScanDevices();
-			$this->SetTimerInterval('ScanTimer', 60 * 1000);
+			$this->SetTimerInterval('ScanTimer', 120 * 1000);
 		}
 
 		public function ReceiveData($JSONString)
