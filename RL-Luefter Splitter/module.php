@@ -59,7 +59,9 @@ declare(strict_types=1);
 				'ClientIP' => $data->ClientIP,
             	'ClientPort' => $data->ClientPort,
 				'EnableBroadcast' => true,
-				'Broadcast' => $data->Broadcast
+				//'Broadcast' => $data->Broadcast
+				'Broadcast' => 0
+				
 				]));
 
 			return 'String data for device instance!';
