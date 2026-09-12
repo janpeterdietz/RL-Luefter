@@ -59,8 +59,8 @@ declare(strict_types=1);
 				'ClientIP' => $data->ClientIP,
             	'ClientPort' => $data->ClientPort,
 				'EnableBroadcast' => true,
-				//'Broadcast' => $data->Broadcast
-				'Broadcast' => 0
+				'Broadcast' => $data->Broadcast
+				//'Broadcast' => 0
 				
 				]));
 
