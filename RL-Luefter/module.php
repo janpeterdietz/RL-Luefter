@@ -175,7 +175,7 @@ declare(strict_types=1);
 		public function SetValueEx(array $data)
         {
 
-			$this-> LogMessage ('SetValueEx In: ' . json_encode($data), KL_DEBUG)
+			$this-> LogMessage ('SetValueEx In: ' . json_encode($data), KL_NOTIFY);
 		$datablock = "";
 			if (array_key_exists('Speed', $data))
 			{
@@ -202,7 +202,7 @@ declare(strict_types=1);
 				$this->send_parameter($datablock );
 			}
 
-			$this-> LogMessage ('SetValueEx Out' . $datablock, KL_DEBUG)
+			$this-> LogMessage ('SetValueEx Out' . $datablock, KL_NOTIFY);
 	
         }
 
