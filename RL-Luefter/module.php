@@ -237,6 +237,10 @@ declare(strict_types=1);
 
 		public function SendData(string $Payload)
 		{
+			
+			// Debug-Ausgabe für das IP-Symcon Test- / Debug-Fenster (zeigt die Bytes als Hex an)
+    		$this->SendDebug("TX Raw (Hex)", bin2hex($data), 1);
+		
 			if ($this->HasActiveParent()) 
 			{
 				$this->SendDataToParent(json_encode([
@@ -276,7 +280,7 @@ declare(strict_types=1);
 			$datablock = hex2bin('0102242544648388B7');  
 		
 			// 5. Gesamtpaket zusammenfügen (Binary Stream)
-    		$payload = $start 
+    		$content = $start 
 					. $type 
 					. $id_luefter_blocksize 
 					. $id_luefter 
@@ -285,7 +289,7 @@ declare(strict_types=1);
 					. $funcnumber 
 					. $datablock;
 
-			$this->SendData($payload);
+			$this->SendData($content);
 		}
 
 		
