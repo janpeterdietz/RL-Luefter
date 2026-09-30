@@ -175,9 +175,8 @@ declare(strict_types=1);
 		public function SetValueEx(array $data)
         {
 
-			$this-> LogMessage ('SetValueEx In: ' . json_encode($data), KL_NOTIFY);
-
-			$datablock = "";
+			$this-> LogMessage ('SetValueEx In: ' . json_encode($data), KL_DEBUG)
+		$datablock = "";
 			if (array_key_exists('Speed', $data))
 			{
 				$datablock = $datablock . $this->translate_paramter( 'Speed', $data['Speed'] );
@@ -203,7 +202,7 @@ declare(strict_types=1);
 				$this->send_parameter($datablock );
 			}
 
-			$this-> LogMessage ('SetValueEx Out' . utf8_encode($datablock), KL_NOTIFY);
+			$this-> LogMessage ('SetValueEx Out' . $datablock, KL_DEBUG)
 	
         }
 
@@ -252,15 +251,14 @@ declare(strict_types=1);
 
 		public function RequestStatus()
 		{
-		// 1. Header & Konstanten aufbauen (als Hex-Bytes)
 			$start = hex2bin('FDFD');
-			$type  = hex2bin('02');
+			$type = hex2bin('02');
 
 			$id_luefter = $this->ReadPropertyString("Vent_ident");
 			$id_luefter_blocksize = hex2bin('10');
 
 			$password = '1111';
-			$pw_blocksize = chr(strlen($password)); /
+			$pw_blocksize = hex2bin('04'); //chr(strlen($password));
 			
 			$funcnumber = hex2bin('01'); //Datenabfrage
 			//01 = Status
@@ -275,17 +273,9 @@ declare(strict_types=1);
 			
 			$datablock = hex2bin('0102242544648388B7');  
 		
-			// 5. Gesamtpaket zusammenfügen (Binary Stream)
-    		$payload = $start 
-					. $type 
-					. $id_luefter_blocksize 
-					. $id_luefter 
-					. $pw_blocksize 
-					. $password 
-					. $funcnumber 
-					. $datablock;
-
-			$this->SendData($payload);
+			$content = $start . $type . $id_luefter_blocksize . $id_luefter . $pw_blocksize . $password . $funcnumber . $datablock;// . $checksum;
+			
+			$this->SendData(utf8_encode($content));
 		}
 
 		
