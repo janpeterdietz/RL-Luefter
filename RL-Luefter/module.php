@@ -203,7 +203,7 @@ declare(strict_types=1);
 				$this->send_parameter($datablock );
 			}
 
-			$this-> LogMessage ('SetValueEx Out' . $datablock, KL_DEBUG);
+			$this-> LogMessage ('SetValueEx Out' . utf8_encode($datablock), KL_DEBUG);
 	
         }
 
