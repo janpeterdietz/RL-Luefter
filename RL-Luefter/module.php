@@ -245,7 +245,7 @@ declare(strict_types=1);
 			{
 				$this->SendDataToParent(json_encode([
 					'DataID' => '{4E2090FD-8113-C239-622E-BCA354396964}',
-					'Buffer' => $Payload,
+					'Buffer' => utf8_encode($Payload),
 					'ClientIP' => $this->ReadPropertyString("IPAddress"),	
             		'ClientPort' => 4000,
 					'Broadcast' => false,
