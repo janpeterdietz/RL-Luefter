@@ -237,15 +237,11 @@ declare(strict_types=1);
 
 		public function SendData(string $Payload)
 		{
-			
-			// Debug-Ausgabe für das IP-Symcon Test- / Debug-Fenster (zeigt die Bytes als Hex an)
-    		$this->SendDebug("TX Raw (Hex)", bin2hex($Payload), 1);
-		
 			if ($this->HasActiveParent()) 
 			{
 				$this->SendDataToParent(json_encode([
 					'DataID' => '{4E2090FD-8113-C239-622E-BCA354396964}',
-					'Buffer' => utf8_encode($Payload),
+					'Buffer' => $Payload,
 					'ClientIP' => $this->ReadPropertyString("IPAddress"),	
             		'ClientPort' => 4000,
 					'Broadcast' => false,
@@ -264,7 +260,7 @@ declare(strict_types=1);
 			$id_luefter_blocksize = hex2bin('10');
 
 			$password = '1111';
-			$pw_blocksize = chr(strlen($password)); 
+			$pw_blocksize = chr(strlen($password)); /
 			
 			$funcnumber = hex2bin('01'); //Datenabfrage
 			//01 = Status
@@ -280,7 +276,7 @@ declare(strict_types=1);
 			$datablock = hex2bin('0102242544648388B7');  
 		
 			// 5. Gesamtpaket zusammenfügen (Binary Stream)
-    		$content = $start 
+    		$payload = $start 
 					. $type 
 					. $id_luefter_blocksize 
 					. $id_luefter 
@@ -289,7 +285,7 @@ declare(strict_types=1);
 					. $funcnumber 
 					. $datablock;
 
-			$this->SendData($content);
+			$this->SendData($payload);
 		}
 
 		
@@ -317,7 +313,7 @@ declare(strict_types=1);
 
 			$content = $start . $type . $id_luefter_blocksize . $id_luefter . $pw_blocksize . $password . $funcnumber . $datablock;// . $checksum;
 
-			$this->SendData($content);
+			$this->SendData(utf8_encode($content));
 		}
 
 		private function translate_paramter( string $ident, int $value)
