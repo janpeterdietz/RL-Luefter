@@ -252,14 +252,15 @@ declare(strict_types=1);
 
 		public function RequestStatus()
 		{
+		// 1. Header & Konstanten aufbauen (als Hex-Bytes)
 			$start = hex2bin('FDFD');
-			$type = hex2bin('02');
+			$type  = hex2bin('02');
 
 			$id_luefter = $this->ReadPropertyString("Vent_ident");
 			$id_luefter_blocksize = hex2bin('10');
 
 			$password = '1111';
-			$pw_blocksize = hex2bin('04'); //chr(strlen($password));
+			$pw_blocksize = chr(strlen($password)); /
 			
 			$funcnumber = hex2bin('01'); //Datenabfrage
 			//01 = Status
@@ -274,9 +275,17 @@ declare(strict_types=1);
 			
 			$datablock = hex2bin('0102242544648388B7');  
 		
-			$content = $start . $type . $id_luefter_blocksize . $id_luefter . $pw_blocksize . $password . $funcnumber . $datablock;// . $checksum;
-			
-			$this->SendData(utf8_encode($content));
+			// 5. Gesamtpaket zusammenfügen (Binary Stream)
+    		$payload = $start 
+					. $type 
+					. $id_luefter_blocksize 
+					. $id_luefter 
+					. $pw_blocksize 
+					. $password 
+					. $funcnumber 
+					. $datablock;
+
+			$this->SendData($payload);
 		}
 
 		
