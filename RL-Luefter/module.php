@@ -239,7 +239,7 @@ declare(strict_types=1);
 		{
 			
 			// Debug-Ausgabe für das IP-Symcon Test- / Debug-Fenster (zeigt die Bytes als Hex an)
-    		$this->SendDebug("TX Raw (Hex)", bin2hex($data), 1);
+    		$this->SendDebug("TX Raw (Hex)", bin2hex($Payload), 1);
 		
 			if ($this->HasActiveParent()) 
 			{
