@@ -317,7 +317,7 @@ declare(strict_types=1);
 
 			$content = $start . $type . $id_luefter_blocksize . $id_luefter . $pw_blocksize . $password . $funcnumber . $datablock;// . $checksum;
 
-			$this->SendData(utf8_encode($content));
+			$this->SendData($content);
 		}
 
 		private function translate_paramter( string $ident, int $value)
