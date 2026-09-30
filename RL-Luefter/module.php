@@ -260,7 +260,7 @@ declare(strict_types=1);
 			$id_luefter_blocksize = hex2bin('10');
 
 			$password = '1111';
-			$pw_blocksize = chr(strlen($password)); /
+			$pw_blocksize = chr(strlen($password)); 
 			
 			$funcnumber = hex2bin('01'); //Datenabfrage
 			//01 = Status
