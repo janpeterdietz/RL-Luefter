@@ -184,35 +184,35 @@ declare(strict_types=1);
 				$datablock = $datablock . $this->translate_paramter( 'Speed', $data['Speed'] );
 				$this-> LogMessage ('SetValueEx In: ' . ' Speed', KL_NOTIFY);
 
-				}
+			}
 	
 			if (array_key_exists('State', $data))
 			{
 				$datablock = $datablock . $this->translate_paramter( 'State', (int)$data['State'] );
 				$this-> LogMessage ('SetValueEx In: ' . ' State', KL_NOTIFY);
 
-				}
+			}
 			
 			if (array_key_exists('Powermode', $data))
 			{
 				$datablock = $datablock . $this->translate_paramter( 'Powermode', $data['Powermode'] );
-						$this-> LogMessage ('SetValueEx In: ' . ' Powermode', KL_NOTIFY);
+				$this-> LogMessage ('SetValueEx In: ' . ' Powermode', KL_NOTIFY);
 
-				}
+			}
 	
 			if (array_key_exists('Operatingmode', $data))
 			{
 				$datablock = $datablock . $this->translate_paramter( 'Operatingmode', $data['Operatingmode'] );
-						$this-> LogMessage ('SetValueEx In: ' . ' Operatingmode', KL_NOTIFY);
+				$this-> LogMessage ('SetValueEx In: ' . ' Operatingmode', KL_NOTIFY);
 
-				}
+			}
 	
 			if (strlen($datablock) >= 2)
 			{
 				$this->send_parameter($datablock );
-									$this-> LogMessage ('SetValueEx In: ' . ' Länge ' .strlen($datablock), KL_NOTIFY);
+				$this-> LogMessage ('SetValueEx In: ' . ' Länge ' .strlen($datablock), KL_NOTIFY);
 
-				}
+			}
 
 			$this-> LogMessage ('SetValueEx Out' . $datablock, KL_NOTIFY);
 	
@@ -320,7 +320,7 @@ declare(strict_types=1);
 
 		private function translate_paramter( string $ident, int $value)
 		{
-			$this->LogMessage("Translate " . $ident . 'Value ' . $value, KL_NOTIFY);
+			$this->LogMessage("translate_paramter " . $ident . 'Value ' . $value, KL_NOTIFY);
 				
 			switch ($ident)
 			{
@@ -334,7 +334,7 @@ declare(strict_types=1);
 						$value = hex2bin('00');
 					}
 					$para = hex2bin('01');
-					$datablock = $para . $value;
+					$datablock = $para . chr($value);
 				break; 
 				
 				case "Powermode": 			
@@ -344,7 +344,7 @@ declare(strict_types=1);
 						$value = 0xff;
 					}
 					$para = hex2bin('02');
-					$datablock = $para . chr($value);;
+					$datablock = $para . chr($value);
 				break; 
 
 				
