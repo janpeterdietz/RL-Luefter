@@ -176,31 +176,43 @@ declare(strict_types=1);
         {
 
 			$this-> LogMessage ('SetValueEx In: ' . json_encode($data), KL_NOTIFY);
-		$datablock = "";
+
+			$datablock = "";
+			
 			if (array_key_exists('Speed', $data))
 			{
 				$datablock = $datablock . $this->translate_paramter( 'Speed', $data['Speed'] );
-			}
+				$this-> LogMessage ('SetValueEx In: ' . ' Speed', KL_NOTIFY);
+
+				}
 	
 			if (array_key_exists('State', $data))
 			{
 				$datablock = $datablock . $this->translate_paramter( 'State', (int)$data['State'] );
-			}
+				$this-> LogMessage ('SetValueEx In: ' . ' State', KL_NOTIFY);
+
+				}
 			
 			if (array_key_exists('Powermode', $data))
 			{
 				$datablock = $datablock . $this->translate_paramter( 'Powermode', $data['Powermode'] );
-			}
+						$this-> LogMessage ('SetValueEx In: ' . ' Powermode', KL_NOTIFY);
+
+				}
 	
 			if (array_key_exists('Operatingmode', $data))
 			{
 				$datablock = $datablock . $this->translate_paramter( 'Operatingmode', $data['Operatingmode'] );
-			}
+						$this-> LogMessage ('SetValueEx In: ' . ' Operatingmode', KL_NOTIFY);
+
+				}
 	
 			if (strlen($datablock) >= 2)
 			{
 				$this->send_parameter($datablock );
-			}
+									$this-> LogMessage ('SetValueEx In: ' . ' Länge ' .strlen($datablock), KL_NOTIFY);
+
+				}
 
 			$this-> LogMessage ('SetValueEx Out' . $datablock, KL_NOTIFY);
 	
