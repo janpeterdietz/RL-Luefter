@@ -9,7 +9,6 @@ declare(strict_types=1);
 			parent::Create();
 
 			$this->ConnectParent('{B62FAC0C-B4EE-9669-4FA3-334D4BD50E3D}');
-			
 
 			if (!IPS_VariableProfileExists('RLV.Powermode')) 
 			{
@@ -240,7 +239,7 @@ declare(strict_types=1);
 			{
 				$this->SendDataToParent(json_encode([
 					'DataID' => '{4E2090FD-8113-C239-622E-BCA354396964}',
-					'Buffer' => $Payload,
+					'Buffer' => utf8_encode($Payload),
 					'ClientIP' => $this->ReadPropertyString("IPAddress"),	
             		'ClientPort' => 4000,
 					'Broadcast' => false,
@@ -275,7 +274,7 @@ declare(strict_types=1);
 		
 			$content = $start . $type . $id_luefter_blocksize . $id_luefter . $pw_blocksize . $password . $funcnumber . $datablock;// . $checksum;
 			
-			$this->SendData(utf8_encode($content));
+			$this->SendData($content);
 		}
 
 		
@@ -303,7 +302,7 @@ declare(strict_types=1);
 
 			$content = $start . $type . $id_luefter_blocksize . $id_luefter . $pw_blocksize . $password . $funcnumber . $datablock;// . $checksum;
 
-			$this->SendData(utf8_encode($content));
+			$this->SendData($content);
 		}
 
 		private function translate_paramter( string $ident, int $value)
