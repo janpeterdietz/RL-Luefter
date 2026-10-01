@@ -180,22 +180,22 @@ declare(strict_types=1);
 			
 			if (array_key_exists('Speed', $data))
 			{
-				$datablock = $datablock . $this->translate_paramter( 'Speed', $data['Speed'] );
+				$datablock = $datablock . $this->translate_parameter( 'Speed', $data['Speed'] );
 			}
 	
 			if (array_key_exists('State', $data))
 			{
-				$datablock = $datablock . $this->translate_paramter( 'State', (int)$data['State'] );
+				$datablock = $datablock . $this->translate_parameter( 'State', (int)$data['State'] );
 			}
 			
 			if (array_key_exists('Powermode', $data))
 			{
-				$datablock = $datablock . $this->translate_paramter( 'Powermode', $data['Powermode'] );
+				$datablock = $datablock . $this->translate_parameter( 'Powermode', $data['Powermode'] );
 			}
 	
 			if (array_key_exists('Operatingmode', $data))
 			{
-				$datablock = $datablock . $this->translate_paramter( 'Operatingmode', $data['Operatingmode'] );
+				$datablock = $datablock . $this->translate_parameter( 'Operatingmode', $data['Operatingmode'] );
 			}
 	
 			if (strlen($datablock) >= 2)
@@ -211,19 +211,19 @@ declare(strict_types=1);
             switch ($Ident) 
 			{
                 case 'State':
-					$datablock = $this->translate_paramter( $Ident, (int)$Value);
+					$datablock = $this->translate_parameter( $Ident, (int)$Value);
 					$this->send_parameter( $datablock );
 					break;
                 case 'Powermode':
-                    $datablock = $this->translate_paramter( $Ident, $Value);
+                    $datablock = $this->translate_parameter( $Ident, $Value);
 					$this->send_parameter( $datablock );
 					break;
 				case 'Speed':
-					$datablock = $this->translate_paramter( $Ident, $Value);
+					$datablock = $this->translate_parameter( $Ident, $Value);
 					$this->send_parameter( $datablock );
 					break;
 				case 'Operatingmode':
-					$datablock = $this->translate_paramter( $Ident, $Value);
+					$datablock = $this->translate_parameter( $Ident, $Value);
 					$this->send_parameter( $datablock );
 					break;
                 default:
@@ -305,8 +305,10 @@ declare(strict_types=1);
 			$this->SendData($content);
 		}
 
-		private function translate_paramter( string $ident, int $value)
+		private function translate_parameter( string $ident, int $value)
 		{	
+			$datablock = "";	
+			
 			switch ($ident)
 			{
 				case "State": 
@@ -322,8 +324,9 @@ declare(strict_types=1);
 					$datablock = $para . chr($value);
 				break; 
 				
-				case "Powermode": 			
-					if (($value < 1) or (($value > 3) and ($value != 255)))
+				case "Powermode": 	
+					$value = (int)$value;		
+					if (($value < 1) || (($value > 3) and ($value != 255)))
 					{
 						$this->LogMessage("Powermode setzen,  Falscher Wert $value", KL_NOTIFY);
 						$value = 0xff;
@@ -334,15 +337,15 @@ declare(strict_types=1);
 
 				
 				case "Speed":
-					$value = (integer) round($value * 255 / 100);
+					$value = (int) round($value * 255 / 100);
 					
-					if ($value >= 255)
+					if (($value < 0) || ($value >= 255))
 					{
 						$value = 255;
 					}
 					
 					$para = hex2bin('44');
-					$datablock = $para . chr($value);;
+					$datablock = $para . chr($value);
 				break;   
 
 		
@@ -361,6 +364,8 @@ declare(strict_types=1);
 					break;   
 
 				default:
+					$datablock = "";
+
 					$this->LogMessage("Lüfter Parameter Setzen . Variable nicht veränderbar", KL_NOTIFY);
 				break;
 			}
