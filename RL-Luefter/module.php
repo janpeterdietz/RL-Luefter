@@ -342,7 +342,7 @@ declare(strict_types=1);
 						$value = 0xff;
 					}
 					$para = hex2bin('02');
-					$datablock = $para . sprintf('%c', $value);
+					$datablock = $para . chr($value);;
 				break; 
 
 				
@@ -355,19 +355,31 @@ declare(strict_types=1);
 					}
 					
 					$para = hex2bin('44');
-					$datablock = $para . sprintf('%c', $value);
+					$datablock = $para . chr($value);;
 				break;   
 
 		
 				case "Operatingmode": 				
-					if (($value < 0) or ($value > 2))
+					/*if (($value < 0) or ($value > 2))
 					{
 						$this->LogMessage("Lüfter Operatingmode Setzen . Falsher Wert $value", KL_NOTIFY);
 						$value = 1;
 					}
 					$para = hex2bin('B7');
 					$datablock = $para . sprintf('%c', $value);
-				break;   
+					*/
+					$value = (int)$value;
+
+					// Gültige Wertebereiche prüfen (z. B. 0 = Aus, 1 = Auto, 2 = Manuell)
+					if ($value < 0 || $value > 2) {
+						$this->LogMessage("Lüfter Operatingmode setzen: Falscher Wert ($value)", KL_NOTIFY);
+						$value = 1; // Fallback auf Standardmodus
+					}
+
+					$para = hex2bin('B7');
+					$datablock = $para . chr($value);
+
+					break;   
 
 				default:
 				$this->LogMessage("Lüfter Parameter Setzen . Variable nicht veränderbar", KL_NOTIFY);
