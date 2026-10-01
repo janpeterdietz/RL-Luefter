@@ -175,47 +175,35 @@ declare(strict_types=1);
 		public function SetValueEx(array $data)
         {
 
-			$this-> LogMessage ('SetValueEx In: ' . json_encode($data), KL_NOTIFY);
+			//$this-> LogMessage ('SetValueEx In: ' . json_encode($data), KL_NOTIFY);
 
 			$datablock = "";
 			
 			if (array_key_exists('Speed', $data))
 			{
 				$datablock = $datablock . $this->translate_paramter( 'Speed', $data['Speed'] );
-				$this-> LogMessage ('SetValueEx In: ' . ' Speed', KL_NOTIFY);
-
 			}
 	
 			if (array_key_exists('State', $data))
 			{
 				$datablock = $datablock . $this->translate_paramter( 'State', (int)$data['State'] );
-				$this-> LogMessage ('SetValueEx In: ' . ' State', KL_NOTIFY);
-
 			}
 			
 			if (array_key_exists('Powermode', $data))
 			{
 				$datablock = $datablock . $this->translate_paramter( 'Powermode', $data['Powermode'] );
-				$this-> LogMessage ('SetValueEx In: ' . ' Powermode', KL_NOTIFY);
-
 			}
 	
 			if (array_key_exists('Operatingmode', $data))
 			{
 				$datablock = $datablock . $this->translate_paramter( 'Operatingmode', $data['Operatingmode'] );
-				$this-> LogMessage ('SetValueEx In: ' . ' Operatingmode', KL_NOTIFY);
-
 			}
 	
 			if (strlen($datablock) >= 2)
 			{
 				$this->send_parameter($datablock );
-				$this-> LogMessage ('SetValueEx In: ' . ' Länge ' .strlen($datablock), KL_NOTIFY);
-
 			}
 
-			$this-> LogMessage ('SetValueEx Out' . $datablock, KL_NOTIFY);
-	
         }
 
 
@@ -319,22 +307,20 @@ declare(strict_types=1);
 		}
 
 		private function translate_paramter( string $ident, int $value)
-		{
-			$this->LogMessage("translate_paramter " . $ident . 'Value ' . $value, KL_NOTIFY);
-				
+		{	
 			switch ($ident)
 			{
 				case "State": 
 					if ($value)
 					{
-						$value = hex2bin('01');
+						$value = 0x01;
 					}
 					else
 					{
-						$value = hex2bin('00');
+						$value = 0x00;
 					}
 					$para = hex2bin('01');
-					$datablock = $para . $value;
+					$datablock = $para . chr($value);
 				break; 
 				
 				case "Powermode": 			
@@ -362,14 +348,6 @@ declare(strict_types=1);
 
 		
 				case "Operatingmode": 				
-					/*if (($value < 0) or ($value > 2))
-					{
-						$this->LogMessage("Lüfter Operatingmode Setzen . Falsher Wert $value", KL_NOTIFY);
-						$value = 1;
-					}
-					$para = hex2bin('B7');
-					$datablock = $para . sprintf('%c', $value);
-					*/
 					$value = (int)$value;
 
 					// Gültige Wertebereiche prüfen (z. B. 0 = Aus, 1 = Auto, 2 = Manuell)
@@ -384,7 +362,7 @@ declare(strict_types=1);
 					break;   
 
 				default:
-				$this->LogMessage("Lüfter Parameter Setzen . Variable nicht veränderbar", KL_NOTIFY);
+					$this->LogMessage("Lüfter Parameter Setzen . Variable nicht veränderbar", KL_NOTIFY);
 				break;
 			}
 
