@@ -334,7 +334,7 @@ declare(strict_types=1);
 						$value = hex2bin('00');
 					}
 					$para = hex2bin('01');
-					$datablock = $para . chr($value);
+					$datablock = $para . $value;
 				break; 
 				
 				case "Powermode": 			
