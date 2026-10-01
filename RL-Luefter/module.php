@@ -320,6 +320,8 @@ declare(strict_types=1);
 
 		private function translate_paramter( string $ident, int $value)
 		{
+			$this->LogMessage("Translate " . $ident . 'Value ' . $value, KL_NOTIFY);
+				
 			switch ($ident)
 			{
 				case "State": 
